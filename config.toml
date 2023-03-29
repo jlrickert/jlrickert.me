@@ -49,17 +49,17 @@ weight = 4
 [params]
 home = 'Home'
 # Meta data
-description = 'The website of Sam Robbins, 2nd Year Computer Science Student at Durham University'
-author = 'Sam Robbins'
+description = 'The website of Jared Rickert, professional Full Stack Web Developer and Infrastructure Engineer'
+author = 'Jared Rickert'
 
 
 [params.contact]
 enable = true
-formAction = '' #contact form works with formspree.io
+formAction = 'https://formspree.io/f/jaredrickert52@gmail.com' #contact form works with formspree.io
 
 [params.footer]
-email = 'samrobbinsgb@gmail.com'
-address = 'Durham, UK'
+email = 'jaredrickert52@gmail.com'
+address = 'Forest Lake, MN'
 googlemaps = 'https://www.google.com/maps/embed/v1/place?q=place_id:ChIJwbHYJaUqfEgRK0Ui9dVGimc&key=AIzaSyAE_4rVAKux_DSPcb_OdSRDaovtPOSk_3U'
 
 [markup]

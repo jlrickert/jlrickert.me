@@ -1,13 +1,17 @@
 ---
 title: "About"
-date: 2019-05-12T12:14:34+06:00
+date: 2023-03-26T17:01:49+00:00
 description: "This is meta description."
-author : "Sam Robbins"
-authorImage : "images/about/profile.jpg"
+author : "Jared Rickert"
+authorImage : "https://ui-avatars.com/api/?background=fff&amp;color=000&name=Jared+Rickert"
 ---
 
-Hi! I'm Sam, a second year Computer Science student from Durham University. 
-I like doing personal projects, which you will find in the portfolio page of this website. 
-My specialties can be found on the homepage, of which most are web development or cyber security.
+Hi! I'm Jared, a professional Full Stack Web Engineer. My specialties can be
+found on the homepage, of which most are web development or cloud
+infrastructure.
 
-I am currently available for part time remote work, but will be looking for full time employment from summer 2021.
+I am currently available for full time remote work.  I am looking for either a
+web dev role, either frontend, backend, or full stack.  I am also interested in
+Site Reliability Engineer, Infrastructure Engineer, Platform Engineer, or
+DevOps roles.
+
