@@ -1,0 +1,61 @@
+baseURL: https://jlrickert.me
+languageCode: en-US
+title: Jared Rickert
+enableGitInfo: true
+enableRobotsTXT: true
+module:
+  imports:
+    - path: github.com/jlrickert/hugo-crt
+
+  hugoVersion:
+    extended: true
+#     imports:
+#         - mounts:
+#               - source: github.com/jlrickert/zet
+#                 target: content/zet
+params:
+  plugins:
+    css:
+      - URL: https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/css/uikit.min.css
+    js:
+      - URL: https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit.min.js
+      - URL: https://cdn.jsdelivr.net/npm/uikit@3.2.6/dist/js/uikit-icons.min.js
+  home: Home
+  description:
+    The website of Jared Rickert, professional Full Stack Web Developer and
+    Infrastructure Engineer
+  author: Jared Rickert
+  contact:
+    enable: true
+    formAction: https://formspree.io/f/jaredrickert52@gmail.com
+  footer:
+    email: jaredrickert52@gmail.com
+    address: ""
+    googlemaps: ""
+menu:
+  main:
+    - name: Blog
+      url: blog
+      weight: 1
+    - name: Zet
+      url: /zet
+      weight: 2
+    - name: Portfolio
+      url: /portfolio
+      weight: 3
+    - name: About
+      url: /about
+      weight: 4
+    - name: Contact
+      url: /contact
+      weight: 5
+markup:
+  highlight:
+    codeFences: true
+    guessSyntax: false
+    lineNoStart: 1
+    lineNos: true
+    lineNumbersInTable: true
+    noClasses: true
+    style: rainbow_dash
+    tabWidth: 4
