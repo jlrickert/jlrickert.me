@@ -1,5 +1,5 @@
-module jlrickert/portfolio
+module github.com/jlrickert/jlrickert.me
 
-go 1.20
+go 1.21.1
 
-require github.com/samrobbins85/hugo-developer-portfolio v0.0.0-20221230201635-d7e23c1c723e // indirect
+require github.com/jlrickert/hugo-crt v0.0.0-20230921164428-3ebbd579323d // indirect
