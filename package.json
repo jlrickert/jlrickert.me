@@ -1,0 +1,11 @@
+{
+	"scripts": {
+		"dev": "hugo server --watch",
+		"build:dev": "",
+		"build:prod": "hugo"
+	},
+	"devDependencies": {
+		"prettier": "^3.0.3",
+		"prettier-plugin-go-template": "^0.0.15"
+	}
+}
