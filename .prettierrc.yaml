@@ -1,5 +1,3 @@
-plugins:
-    - "prettier-plugin-go-template"
 proseWrap: always
 printWidth: 80
 useTabs: true
