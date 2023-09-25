@@ -16,5 +16,9 @@ module.exports = {
 			proseWrap: true,
 			useTabs: false,
 		},
+		{
+			files: '*.svelte',
+			options: { parser: 'svelte' },
+		},
 	],
 };
