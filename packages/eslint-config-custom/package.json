@@ -1,0 +1,16 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@jlrickert/eslint-config-custom",
+	"license": "Apache-2.0",
+	"version": "0.0.0",
+	"private": true,
+	"dependencies": {
+		"@vercel/style-guide": "^5.1.0",
+		"eslint-config-next": "^14.0.3",
+		"eslint-config-turbo": "^1.10.16",
+		"eslint-plugin-mdx": "^2.2.0"
+	},
+	"publishConfig": {
+		"access": "public"
+	}
+}
