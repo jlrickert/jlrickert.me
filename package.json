@@ -10,10 +10,14 @@
 		"format": "prettier --write .",
 		"lint": "turbo lint",
 		"test": "turbo test",
-		"typecheck": "turbo typecheck"
+		"typecheck": "turbo typecheck",
+		"changeset": "changeset",
+		"version-packages": "changeset version",
+		"release": "turbo build --filter=docs^... && changeset publish"
 	},
 	"devDependencies": {
 		"prettier": "^3.0.3",
-		"turbo": "^1.10.16"
+		"turbo": "^1.10.16",
+		"@changesets/cli": "^2.26.2"
 	}
 }
