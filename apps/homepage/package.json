@@ -1,0 +1,28 @@
+{
+	"$schema": "https://json.schemastore.org/package.json",
+	"name": "@jlrickert/homepage",
+	"private": true,
+	"scripts": {
+		"build": "next build",
+		"clean": "rm -rf .next",
+		"dev": "next dev -p 3002",
+		"lint": "next lint",
+		"typecheck": "tsc --noEmit",
+		"start": "next start"
+	},
+	"dependencies": {
+		"next": "^14.0.2",
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0",
+		"@jlrickert/react-ui": "workspace:*"
+	},
+	"devDependencies": {
+		"@jlrickert/eslint-config-custom": "workspace:*",
+		"@jlrickert/tsconfig": "workspace:*",
+		"@next/eslint-plugin-next": "^14.0.2",
+		"@types/node": "^20.9.0",
+		"@types/react": "^18.2.37",
+		"@types/react-dom": "^18.2.15",
+		"typescript": "^5.2.2"
+	}
+}
