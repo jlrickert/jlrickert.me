@@ -1,19 +1,25 @@
 {
+	"$schema": "https://json.schemastore.org/prettierrc.json",
 	"useTabs": true,
 	"singleQuote": false,
 	"semi": true,
 	"trailingComma": "none",
 	"printWidth": 80,
 	"tabWidth": 4,
-	"plugins": ["prettier-plugin-svelte"],
-	"pluginSearchDirs": ["."],
 	"overrides": [
-		{ "files": "*.svelte", "options": { "parser": "svelte" } },
 		{
 			"files": "*.md",
 			"options": {
 				"proseWrap": "always",
+				"tabWidth": 2,
 				"parser": "markdown"
+			}
+		},
+		{
+			"files": "*.yaml",
+			"options": {
+				"tabWidth": 2,
+				"parser": "yaml"
 			}
 		}
 	]
