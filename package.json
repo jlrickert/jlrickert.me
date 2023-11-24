@@ -2,6 +2,7 @@
 	"$schema": "https://json.schemastore.org/package.json",
 	"name": "jlrickert.me",
 	"version": "0.0.1",
+	"repository": "https://github.com/jlrickert/jlrickert.me",
 	"private": true,
 	"scripts": {
 		"build": "turbo build",
