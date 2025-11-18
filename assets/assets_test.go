@@ -95,6 +95,7 @@ func TestContentIsRenderedHTML(t *testing.T) {
 	assert.Contains(t, content, "<p")
 	assert.Contains(t, content, "<ul")
 	assert.Contains(t, content, "<li")
+	assert.NotContains(t, content, "<br")
 	assert.True(t, bytes.Contains([]byte(content), []byte("<")),
 		"Content should be HTML with opening tags")
 	assert.True(t, bytes.Contains([]byte(content), []byte(">")),

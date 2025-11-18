@@ -4,7 +4,6 @@ import (
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
-	"github.com/yuin/goldmark/renderer/html"
 )
 
 var Markdown goldmark.Markdown = goldmark.New(
@@ -13,4 +12,6 @@ var Markdown goldmark.Markdown = goldmark.New(
 		parser.WithAutoHeadingID(),
 		parser.WithAttribute(),
 	),
-	goldmark.WithRendererOptions(html.WithHardWraps()))
+	goldmark.WithRendererOptions(
+	// use module "github.com/yuin/goldmark/renderer/html"
+	))
