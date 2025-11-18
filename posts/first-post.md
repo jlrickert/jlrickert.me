@@ -2,7 +2,9 @@
 title: Welcome to My Blog
 date: 2025-11-17
 description: An introduction to my portfolio and what you can expect here
-tags: [welcome, introduction]
+tags:
+  - welcome
+  - introduction
 ---
 
 # Welcome to My Blog

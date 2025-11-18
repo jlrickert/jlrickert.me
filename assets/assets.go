@@ -5,6 +5,7 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"maps"
 	"path/filepath"
 
 	"github.com/jlrickert/jlrickert.me"
@@ -19,8 +20,8 @@ func NewAssetManager() *AssetManager {
 	return &AssetManager{assets: jlrickert.Assets}
 }
 
-func (m *AssetManager) parseFrontmatter(data []byte) (map[string]string, []byte, error) {
-	meta := map[string]string{}
+func (m *AssetManager) parseFrontmatter(data []byte) (map[string]any, []byte, error) {
+	meta := make(map[string]any)
 	content := data
 
 	if !bytes.HasPrefix(data, []byte("---")) {
@@ -49,9 +50,7 @@ func (m *AssetManager) parseFrontmatter(data []byte) (map[string]string, []byte,
 		)
 	}
 
-	for key, val := range yamlMap {
-		meta[key] = fmt.Sprint(val)
-	}
+	maps.Copy(meta, yamlMap)
 
 	return meta, content, nil
 }
@@ -81,4 +80,8 @@ func (m *AssetManager) GetPost(ctx context.Context, slug string) (*Post, error) 
 		Content: buf.Bytes(),
 		Meta:    meta,
 	}, nil
+}
+
+func (m *AssetManager) GetSkills(ctx context.Context, skill string) []string {
+	panic("Not implemented")
 }

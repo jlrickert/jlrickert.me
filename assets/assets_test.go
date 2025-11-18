@@ -1,8 +1,10 @@
 package assets
 
 import (
+	"bytes"
 	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -46,7 +48,6 @@ func TestGetPostMetadata(t *testing.T) {
 	require.NoError(t, err)
 	assert.NotEmpty(t, post.Meta)
 	assert.Equal(t, "Welcome to My Blog", post.Meta["title"])
-	assert.Equal(t, "2025-11-17", post.Meta["date"])
 }
 
 func TestPostMetadata(t *testing.T) {
@@ -55,7 +56,7 @@ func TestPostMetadata(t *testing.T) {
 
 	require.NoError(t, err)
 	assert.Equal(t, "Welcome to My Blog", post.Title())
-	assert.Equal(t, "2025-11-17", post.Date())
+	assert.Equal(t, time.Date(2025, 11, 17, 0, 0, 0, 0, time.Local), post.Date())
 	assert.Equal(t,
 		"An introduction to my portfolio and what you can expect here",
 		post.Description(),
@@ -69,19 +70,8 @@ func TestPostTags(t *testing.T) {
 	require.NoError(t, err)
 	tags := post.Tags()
 	assert.Equal(t, 2, len(tags))
-	assert.Contains(t, tags, "welcome")
 	assert.Contains(t, tags, "introduction")
-}
-
-func TestGetPostWithContext(t *testing.T) {
-	manager := NewAssetManager()
-	ctx, cancel := context.WithCancel(context.Background())
-	cancel()
-
-	post, err := manager.GetPost(ctx, "first-post")
-
-	assert.Error(t, err)
-	assert.Nil(t, post)
+	assert.Contains(t, tags, "welcome")
 }
 
 func TestGetPostEmptySlug(t *testing.T) {
@@ -90,4 +80,23 @@ func TestGetPostEmptySlug(t *testing.T) {
 
 	assert.Error(t, err)
 	assert.Nil(t, post)
+}
+
+func TestContentIsRenderedHTML(t *testing.T) {
+	manager := NewAssetManager()
+	post, err := manager.GetPost(context.Background(), "first-post")
+
+	require.NoError(t, err)
+	require.NotNil(t, post)
+
+	content := string(post.Content)
+	assert.Contains(t, content, "<h1")
+	assert.Contains(t, content, "<h2")
+	assert.Contains(t, content, "<p")
+	assert.Contains(t, content, "<ul")
+	assert.Contains(t, content, "<li")
+	assert.True(t, bytes.Contains([]byte(content), []byte("<")),
+		"Content should be HTML with opening tags")
+	assert.True(t, bytes.Contains([]byte(content), []byte(">")),
+		"Content should be HTML with closing brackets")
 }

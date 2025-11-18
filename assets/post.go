@@ -13,30 +13,46 @@ import (
 type Post struct {
 	Slug    string
 	Content []byte
-	Meta    map[string]string
+	Meta    map[string]any
 }
 
 // Title returns the post title from metadata or the first h1 from
 // content.
 func (p *Post) Title() string {
-	if title := p.Meta["title"]; title != "" {
+	if title, ok := p.Meta["title"].(string); ok && title != "" {
 		return title
 	}
 	return p.extractFirstHeading()
 }
 
 // Date returns the post date from metadata or current date.
-func (p *Post) Date() string {
-	if date := p.Meta["date"]; date != "" {
-		return date
+func (p *Post) Date() time.Time {
+	if dateStr, ok := p.Meta["date"].(string); ok && dateStr != "" {
+		if parsedDate, err := time.Parse("2006-01-02", dateStr); err == nil {
+			return time.Date(
+				parsedDate.Year(),
+				parsedDate.Month(),
+				parsedDate.Day(),
+				0, 0, 0, 0,
+				time.Local,
+			)
+		}
+	} else if date, ok := p.Meta["date"].(time.Time); ok {
+		return time.Date(
+			date.Year(),
+			date.Month(),
+			date.Day(),
+			0, 0, 0, 0,
+			time.Local,
+		)
 	}
-	return time.Now().Format("2006-01-02")
+	return time.Now()
 }
 
 // Description returns the post description from metadata or lead
 // paragraph.
 func (p *Post) Description() string {
-	if desc := p.Meta["description"]; desc != "" {
+	if desc, ok := p.Meta["description"].(string); ok && desc != "" {
 		return desc
 	}
 	return p.extractLeadParagraph()
@@ -44,17 +60,37 @@ func (p *Post) Description() string {
 
 // Tags returns the tags from metadata as a slice of strings.
 func (p *Post) Tags() []string {
-	tagsStr := p.Meta["tags"]
-	if tagsStr == "" {
-		return []string{}
+	// If already a slice of strings, return it
+	if tags, ok := p.Meta["tags"].([]string); ok {
+		return tags
 	}
 
-	var tags []string
-	err := yaml.Unmarshal([]byte(tagsStr), &tags)
-	if err != nil {
-		return []string{}
+	// Handle []any from YAML unmarshaling
+	if tagsInterface, ok := p.Meta["tags"].([]any); ok {
+		tags := make([]string, 0, len(tagsInterface))
+		for _, tag := range tagsInterface {
+			if tagStr, ok := tag.(string); ok {
+				tags = append(tags, tagStr)
+			}
+		}
+		if len(tags) > 0 {
+			return tags
+		}
 	}
-	return tags
+
+	// Try as string and unmarshal
+	if tagsStr, ok := p.Meta["tags"].(string); ok {
+		if tagsStr == "" {
+			return []string{}
+		}
+		var tags []string
+		if err := yaml.Unmarshal([]byte(tagsStr), &tags); err != nil {
+			return []string{}
+		}
+		return tags
+	}
+
+	return []string{}
 }
 
 // extractFirstHeading finds the first h1 heading in the content and
