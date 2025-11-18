@@ -1,0 +1,15 @@
+# https://taskfile.dev
+
+version: "3"
+vars:
+  GREETING: Hello, World!
+tasks:
+  default:
+    cmds:
+      - echo "{{.GREETING}}" "{{.CLI_ARGS}}"
+    silent: true
+  test:
+    cmd: go test ./assets/... "{{.CLI_ARGS}}"
+    sources:
+      - assets/*go
+    watch: true
