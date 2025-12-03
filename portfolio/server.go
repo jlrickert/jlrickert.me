@@ -218,8 +218,8 @@ func (s *Server) renderTemplate(name string, data any) ([]byte, error) {
 		return nil, err
 	}
 
-	// Parse and execute template
-	tmpl, err := template.New(name).Parse(string(templateContent))
+	// Parse and execute template with custom functions
+	tmpl, err := template.New(name).Funcs(TemplateFuncs()).Parse(string(templateContent))
 	if err != nil {
 		s.logger.Error("failed to parse template", "path", themePath, "error", err)
 		return nil, err
