@@ -1,0 +1,15 @@
+<!-- Skills section partial for htmx expandable content -->
+<div class="skills-tree">
+    {{range .Skills}}
+    <div class="skill-category" style="margin-bottom: 15px; cursor: pointer;"
+         hx-toggle="skill-detail-{{.Category}}"
+         hx-indicator=".htmx-indicator">
+        <span style="color: var(--terminal-green-light);">▶ {{.Category}}</span>
+        <div id="skill-detail-{{.Category}}" class="skill-details" style="display: none; margin-left: 20px; margin-top: 8px;">
+            {{range .Items}}
+            <div class="skill-item">{{.}}</div>
+            {{end}}
+        </div>
+    </div>
+    {{end}}
+</div>

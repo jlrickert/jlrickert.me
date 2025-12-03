@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>dev@portfolio:~$</title>
+        <!-- htmx for progressive enhancement -->
+        <script
+            src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
+        ></script>
+
+        <!-- Configure htmx for default behavior -->
+        <script>
+            htmx.config.defaultIndicatorStyle = "spinner";
+            htmx.config.timeout = 10000;
+            // Enable history for AJAX requests (replaces page state)
+            htmx.config.historyCacheSize = 10;
+        </script>
+    </head>
+    <body>
+        <canvas id="starfield"></canvas>
+    </body>
+</html>

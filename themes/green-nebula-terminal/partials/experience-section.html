@@ -1,0 +1,29 @@
+<!-- Experience section partial for htmx expandable content -->
+<div style="margin-top: 20px">
+    {{range .Experience}}
+    <div
+        class="experience-item"
+        style="margin-bottom: 20px; border-left: 3px solid var(--terminal-green-dark); padding-left: 15px"
+    >
+        <div
+            style="cursor: pointer; user-select: none"
+            hx-get="/api/experience/detail/{{.ID}}"
+            hx-target="next .experience-detail"
+            hx-swap="innerHTML"
+            hx-indicator=".htmx-indicator"
+        >
+            <span style="color: var(--terminal-green-light)">▶</span>
+            <strong>{{.Company}}</strong> - {{.Title}}
+            <div style="color: var(--terminal-green-dark); font-size: 0.9em">
+                {{.Period}}
+            </div>
+        </div>
+        <div
+            class="experience-detail"
+            style="display: none; margin-top: 10px; color: var(--terminal-green); font-size: 0.95em"
+        >
+            {{.Description}}
+        </div>
+    </div>
+    {{end}}
+</div>

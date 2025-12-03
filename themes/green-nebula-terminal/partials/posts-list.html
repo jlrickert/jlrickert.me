@@ -1,0 +1,17 @@
+<!-- Posts list partial for htmx -->
+{{range .Posts}}
+<div class="blog-post" hx-get="/posts/{{.Slug}}" hx-target="#post-detail" hx-indicator=".htmx-indicator">
+    <div class="blog-date">-rw-r--r-- 1 user staff {{.Size}} {{.Date}}</div>
+    <div class="blog-title">{{.Title}}</div>
+    <div class="blog-excerpt">{{.Description}}</div>
+    {{if .Tags}}
+    <div class="blog-tags" style="margin-top: 10px; color: var(--terminal-green-dark); font-size: 0.9em;">
+        {{range .Tags}}
+        <span hx-get="/api/posts/partial?tag={{.}}" hx-target="#posts-list" class="tag-link" style="margin-right: 8px; cursor: pointer;">
+            #{{.}}
+        </span>
+        {{end}}
+    </div>
+    {{end}}
+</div>
+{{end}}

@@ -1,10 +1,11 @@
-package assets
+package portfolio
 
 import (
 	"bytes"
 	"context"
 	"embed"
 	"fmt"
+	"io/fs"
 	"maps"
 	"path/filepath"
 
@@ -24,11 +25,19 @@ func NewAssetManager() *AssetManager {
 
 // GetPost retrieves and parses a post by slug, converting its markdown
 // content to HTML.
-func (m *AssetManager) GetPost(
-	ctx context.Context,
-	slug string,
-) (*Post, error) {
-	data, err := m.assets.ReadFile(filepath.Join("posts", slug+".md"))
+func (m *AssetManager) GetPost(ctx context.Context, slug string) (*Post, error) {
+
+	// DUMP CONTENTS OF m.assets to stdout
+	entries, err := m.assets.ReadDir(".")
+	if err != nil {
+		fmt.Printf("Failed to read assets: %v\n", err)
+	} else {
+		for _, entry := range entries {
+			fmt.Printf("%s (dir: %v)\n", entry.Name(), entry.IsDir())
+		}
+	}
+
+	data, err := fs.ReadFile(m.assets, filepath.Join("data", "posts", slug+".md"))
 	if err != nil {
 		return nil, fmt.Errorf(
 			"slug \"%s\" does not exist: %w",
@@ -56,7 +65,7 @@ func (m *AssetManager) GetPost(
 
 // GetData retrieves and parses the data.yaml file into a Data struct.
 func (m *AssetManager) GetData(ctx context.Context) (*Data, error) {
-	data, err := m.assets.ReadFile("data.yaml")
+	data, err := m.assets.ReadFile(filepath.Join("data", "data.yaml"))
 	if err != nil {
 		return nil, fmt.Errorf(
 			"failed to read data.yaml: %w",
@@ -65,6 +74,17 @@ func (m *AssetManager) GetData(ctx context.Context) (*Data, error) {
 	}
 
 	return LoadData(data)
+}
+
+func (m *AssetManager) GetTemplate(theme, name string) (string, error) {
+	path := fmt.Sprintf("templates/theme/%s/%s.html", theme, name)
+	content, err := m.assets.ReadFile(path)
+	if err != nil {
+		// Fallback to default theme
+		path = fmt.Sprintf("templates/theme/default/%s.html", name)
+		content, err = m.assets.ReadFile(path)
+	}
+	return string(content), err
 }
 
 // parseFrontmatter extracts YAML frontmatter from markdown content.

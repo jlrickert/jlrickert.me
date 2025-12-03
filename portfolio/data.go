@@ -1,4 +1,4 @@
-package assets
+package portfolio
 
 import (
 	"gopkg.in/yaml.v3"

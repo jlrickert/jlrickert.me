@@ -2,5 +2,5 @@ package jlrickert
 
 import "embed"
 
-//go:embed posts/**.md data.yaml
+//go:embed data/posts/** data/data.yaml
 var Assets embed.FS

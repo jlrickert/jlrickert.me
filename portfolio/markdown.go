@@ -1,4 +1,4 @@
-package assets
+package portfolio
 
 import (
 	"github.com/yuin/goldmark"
