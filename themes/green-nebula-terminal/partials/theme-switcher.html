@@ -1,32 +1,41 @@
 <!-- Theme switcher with AJAX via htmx -->
-<div class="theme-switcher" style="margin: 20px 0; display: flex; gap: 10px; align-items: center;">
-    <span style="color: var(--terminal-green-dark);">$ theme:</span>
-    <form style="display: flex; gap: 10px;">
-        <button type="submit"
-                name="theme"
-                value="default"
-                hx-post="/api/theme"
-                hx-vals='{"theme":"default"}'
-                hx-indicator=".htmx-indicator"
-                style="background: transparent; border: 1px solid var(--terminal-green-dark); color: var(--terminal-green); padding: 5px 10px; cursor: pointer; font-family: monospace;">
+<div
+    class="theme-switcher"
+    style="margin: 20px 0; display: flex; gap: 10px; align-items: center"
+>
+    <span style="color: var(--terminal-green-dark)">$ theme:</span>
+    <form style="display: flex; gap: 10px">
+        <button
+            type="submit"
+            name="theme"
+            value="default"
+            hx-post="/api/theme"
+            hx-vals='{"theme":"default"}'
+            hx-indicator=".htmx-indicator"
+            style="background: transparent; border: 1px solid var(--terminal-green-dark); color: var(--terminal-green); padding: 5px 10px; cursor: pointer; font-family: monospace"
+        >
             [default]
         </button>
-        <button type="submit"
-                name="theme"
-                value="dark"
-                hx-post="/api/theme"
-                hx-vals='{"theme":"dark"}'
-                hx-indicator=".htmx-indicator"
-                style="background: transparent; border: 1px solid var(--terminal-green-dark); color: var(--terminal-green); padding: 5px 10px; cursor: pointer; font-family: monospace;">
+        <button
+            type="submit"
+            name="theme"
+            value="dark"
+            hx-post="/api/theme"
+            hx-vals='{"theme":"dark"}'
+            hx-indicator=".htmx-indicator"
+            style="background: transparent; border: 1px solid var(--terminal-green-dark); color: var(--terminal-green); padding: 5px 10px; cursor: pointer; font-family: monospace"
+        >
             [dark]
         </button>
-        <button type="submit"
-                name="theme"
-                value="light"
-                hx-post="/api/theme"
-                hx-vals='{"theme":"light"}'
-                hx-indicator=".htmx-indicator"
-                style="background: transparent; border: 1px solid var(--terminal-green-dark); color: var(--terminal-green); padding: 5px 10px; cursor: pointer; font-family: monospace;">
+        <button
+            type="submit"
+            name="theme"
+            value="light"
+            hx-post="/api/theme"
+            hx-vals='{"theme":"light"}'
+            hx-indicator=".htmx-indicator"
+            style="background: transparent; border: 1px solid var(--terminal-green-dark); color: var(--terminal-green); padding: 5px 10px; cursor: pointer; font-family: monospace"
+        >
             [light]
         </button>
     </form>

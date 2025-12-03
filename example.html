@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>dev@portfolio:~$</title>
+        <style>
+            :root {
+                --terminal-green: #00ff00;
+                --terminal-green-light: #33ff33;
+                --terminal-green-dark: #00aa00;
+                --terminal-black: #000000;
+                --terminal-bg: #0a0a0a;
+                --glow:
+                    0 0 5px var(--terminal-green), 0 0 10px var(
+                    --terminal-green
+                );
+            }
+
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Courier New", Courier, monospace;
+                background: var(--terminal-black);
+                color: var(--terminal-green);
+                line-height: 1.6;
+                overflow-x: hidden;
+                position: relative;
+            }
+
+            #starfield {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 0;
+                pointer-events: none;
+            }
+
+            .scanline {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(
+                    to bottom,
+                    rgba(0, 255, 0, 0.02) 50%,
+                    transparent 50%
+                );
+                background-size: 100% 4px;
+                pointer-events: none;
+                z-index: 999;
+                animation: scanline 8s linear infinite;
+                opacity: 0.1;
+            }
+
+            @keyframes scanline {
+                0% {
+                    transform: translateY(0);
+                }
+                100% {
+                    transform: translateY(4px);
+                }
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+                position: relative;
+                z-index: 1;
+            }
+
+            header {
+                border: 2px solid var(--terminal-green);
+                padding: 20px;
+                margin-bottom: 30px;
+                background: rgba(0, 0, 0, 0.8);
+                box-shadow: var(--glow);
+            }
+
+            .header-title {
+                font-size: 1.2em;
+                margin-bottom: 15px;
+            }
+
+            .cursor {
+                display: inline-block;
+                width: 10px;
+                height: 1.2em;
+                background: var(--terminal-green);
+                animation: blink 1s infinite;
+                vertical-align: text-bottom;
+            }
+
+            @keyframes blink {
+                0%, 50% {
+                    opacity: 1;
+                }
+                51%, 100% {
+                    opacity: 0;
+                }
+            }
+
+            nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                font-size: 0.9em;
+            }
+
+            nav a {
+                color: var(--terminal-green);
+                text-decoration: none;
+                transition: all 0.3s;
+                padding: 5px 10px;
+                border: 1px solid transparent;
+            }
+
+            nav a:hover {
+                text-shadow: var(--glow);
+                border: 1px solid var(--terminal-green);
+                background: rgba(0, 255, 0, 0.05);
+            }
+
+            section {
+                margin-bottom: 50px;
+                padding: 30px;
+                border: 1px solid var(--terminal-green-dark);
+                background: rgba(0, 0, 0, 0.7);
+                position: relative;
+            }
+
+            .section-header {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+                color: var(--terminal-green-light);
+                text-shadow: 0 0 5px var(--terminal-green);
+            }
+
+            .divider {
+                color: var(--terminal-green-dark);
+                margin: 20px 0;
+                opacity: 0.6;
+            }
+
+            .ascii-art {
+                font-size: 0.7em;
+                line-height: 1;
+                color: var(--terminal-green-light);
+                margin: 20px 0;
+                white-space: pre;
+                overflow-x: auto;
+            }
+
+            .hero-text {
+                font-size: 1.1em;
+                margin: 20px 0;
+            }
+
+            .typing-text {
+                overflow: hidden;
+                white-space: nowrap;
+                display: inline-block;
+            }
+
+            .project-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+                margin-top: 20px;
+            }
+
+            .project-card {
+                border: 2px solid var(--terminal-green-dark);
+                padding: 20px;
+                background: rgba(0, 0, 0, 0.8);
+                transition: all 0.3s;
+                cursor: pointer;
+            }
+
+            .project-card:hover {
+                border-color: var(--terminal-green);
+                box-shadow: var(--glow);
+                transform: translateY(-5px);
+            }
+
+            .project-header {
+                color: var(--terminal-green-light);
+                font-size: 1.1em;
+                margin-bottom: 10px;
+            }
+
+            .project-status {
+                display: inline-block;
+                padding: 2px 8px;
+                border: 1px solid var(--terminal-green);
+                font-size: 0.8em;
+                margin-bottom: 10px;
+                color: var(--terminal-green-light);
+            }
+
+            .project-tech {
+                color: var(--terminal-green-dark);
+                font-size: 0.9em;
+                margin-top: 10px;
+            }
+
+            .blog-list {
+                margin-top: 20px;
+            }
+
+            .blog-post {
+                border-left: 3px solid var(--terminal-green-dark);
+                padding: 15px;
+                margin-bottom: 20px;
+                background: rgba(0, 255, 0, 0.02);
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+
+            .blog-post:hover {
+                border-left-color: var(--terminal-green);
+                background: rgba(0, 255, 0, 0.05);
+                padding-left: 20px;
+            }
+
+            .blog-date {
+                color: var(--terminal-green-dark);
+                font-size: 0.9em;
+            }
+
+            .blog-title {
+                color: var(--terminal-green-light);
+                font-size: 1.2em;
+                margin: 5px 0;
+            }
+
+            .blog-excerpt {
+                color: var(--terminal-green);
+                font-size: 0.95em;
+            }
+
+            .skills-tree {
+                margin: 20px 0;
+                padding-left: 20px;
+            }
+
+            .skill-item {
+                margin: 5px 0;
+                padding-left: 20px;
+                position: relative;
+            }
+
+            .skill-item::before {
+                content: "├──";
+                position: absolute;
+                left: 0;
+                color: var(--terminal-green-dark);
+            }
+
+            .skill-item:last-child::before {
+                content: "└──";
+            }
+
+            .contact-form {
+                max-width: 600px;
+                margin: 20px 0;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 5px;
+                color: var(--terminal-green-light);
+            }
+
+            .form-input,
+            .form-textarea {
+                width: 100%;
+                padding: 10px;
+                background: var(--terminal-black);
+                border: 1px solid var(--terminal-green-dark);
+                color: var(--terminal-green);
+                font-family: "Courier New", Courier, monospace;
+                font-size: 1em;
+                transition: all 0.3s;
+            }
+
+            .form-input:focus,
+            .form-textarea:focus {
+                outline: none;
+                border-color: var(--terminal-green);
+                box-shadow: 0 0 5px var(--terminal-green);
+            }
+
+            .form-textarea {
+                resize: vertical;
+                min-height: 120px;
+            }
+
+            .submit-btn {
+                background: transparent;
+                color: var(--terminal-green);
+                border: 2px solid var(--terminal-green);
+                padding: 10px 30px;
+                font-family: "Courier New", Courier, monospace;
+                font-size: 1em;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+
+            .submit-btn:hover {
+                background: var(--terminal-green);
+                color: var(--terminal-black);
+                box-shadow: var(--glow);
+            }
+
+            .social-links {
+                margin: 30px 0;
+            }
+
+            .social-link {
+                display: block;
+                margin: 10px 0;
+                color: var(--terminal-green);
+                text-decoration: none;
+                transition: all 0.3s;
+            }
+
+            .social-link:hover {
+                color: var(--terminal-green-light);
+                text-shadow: var(--glow);
+                padding-left: 10px;
+            }
+
+            .terminal-widget {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 400px;
+                max-width: calc(100vw - 40px);
+                border: 2px solid var(--terminal-green);
+                background: rgba(0, 0, 0, 0.95);
+                z-index: 1000;
+                box-shadow: var(--glow);
+            }
+
+            .terminal-widget.minimized {
+                width: 200px;
+                height: auto;
+            }
+
+            .terminal-header {
+                background: var(--terminal-green-dark);
+                color: var(--terminal-black);
+                padding: 5px 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                cursor: pointer;
+            }
+
+            .terminal-output {
+                padding: 10px;
+                height: 200px;
+                overflow-y: auto;
+                font-size: 0.9em;
+            }
+
+            .terminal-widget.minimized .terminal-output,
+            .terminal-widget.minimized .terminal-input-line {
+                display: none;
+            }
+
+            .terminal-input-line {
+                display: flex;
+                padding: 10px;
+                border-top: 1px solid var(--terminal-green-dark);
+            }
+
+            .terminal-prompt {
+                margin-right: 5px;
+            }
+
+            .terminal-input {
+                flex: 1;
+                background: transparent;
+                border: none;
+                color: var(--terminal-green);
+                font-family: "Courier New", Courier, monospace;
+                font-size: 0.9em;
+                outline: none;
+            }
+
+            .output-line {
+                margin: 5px 0;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 2000;
+                overflow-y: auto;
+            }
+
+            .modal.active {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+
+            .modal-content {
+                background: var(--terminal-black);
+                border: 2px solid var(--terminal-green);
+                padding: 30px;
+                max-width: 800px;
+                width: 100%;
+                box-shadow: var(--glow);
+                position: relative;
+            }
+
+            .modal-close {
+                position: absolute;
+                top: 10px;
+                right: 15px;
+                font-size: 1.5em;
+                cursor: pointer;
+                color: var(--terminal-green);
+                border: none;
+                background: transparent;
+                padding: 5px 10px;
+            }
+
+            .modal-close:hover {
+                color: var(--terminal-green-light);
+                text-shadow: var(--glow);
+            }
+
+            @media (max-width: 768px) {
+                .ascii-art {
+                    font-size: 0.5em;
+                }
+
+                nav {
+                    flex-direction: column;
+                    gap: 10px;
+                }
+
+                .project-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .terminal-widget {
+                    width: calc(100vw - 40px);
+                    bottom: 10px;
+                    right: 10px;
+                }
+
+                section {
+                    padding: 15px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="starfield"></canvas>
+        <div class="scanline"></div>
+
+        <div class="container">
+            <header>
+                <div class="header-title">
+                    user@portfolio:~$ cat welcome.txt<span
+                        class="cursor"
+                    ></span>
+                </div>
+                <nav>
+                    <a href="#home">[HOME]</a>
+                    <a href="#about">[ABOUT]</a>
+                    <a href="#projects">[PROJECTS]</a>
+                    <a href="#blog">[BLOG]</a>
+                    <a href="#contact">[CONTACT]</a>
+                </nav>
+            </header>
+
+            <section id="home">
+                <pre
+                    class="ascii-art"
+                >
+    _____ _____ _   _  _____   ___   _____ _____
+   /  ___|_   _| | | ||  ___| |   \ |  ___|  ___|
+   \ `--.  | | | | | || |__   | |\ \| |__ | |__
+    `--. \ | | | | | ||  __|  | | \\|  __||  __|
+   /\__/ / | | | |_| || |___  | |\  | |___| |___
+   \____/  \_/  \___/ \____/  |_| \_\____/\____/
+
+            P O R T F O L I O   S Y S T E M
+            </pre>
+                <div class="divider">
+                    ================================================================================
+                </div>
+                <div class="hero-text">
+                    <p>&gt; Initializing portfolio system...</p>
+                    <p>&gt; Loading modules... [OK]</p>
+                    <p>&gt; System ready.</p>
+                    <p style="margin-top: 20px">
+                        <span style="color: var(--terminal-green-light)"
+                        >$ whoami</span><br>
+                        Software Developer specializing in backend systems,
+                        DevOps, and automation.
+                    </p>
+                    <p
+                        style="margin-top: 15px; color: var(--terminal-green-dark)"
+                    >
+                        &gt; Explore the system using the navigation above or
+                        type 'help' in the terminal widget below.
+                    </p>
+                </div>
+                <pre
+                    class="ascii-art"
+                    style="font-size: 0.6em; color: var(--terminal-green-dark)"
+                >
+        .       *        .       .    *     .
+    .    .  *     .    * .     .   .    .
+  *   .      .  *    .      *    .   .   *
+    .   *  .    .  *   .  *   .    .     .
+            </pre>
+            </section>
+
+            <section id="about">
+                <div class="section-header">$ cat ~/about.txt</div>
+                <div class="divider">
+                    --------------------------------------------------------------------------------
+                </div>
+                <p style="margin-bottom: 20px">
+                    Passionate software developer with expertise in building
+                    scalable backend systems, automating infrastructure, and
+                    creating efficient solutions. I thrive in the terminal and
+                    believe in the power of open source.
+                </p>
+                <p style="color: var(--terminal-green-light); margin-top: 30px">
+                    $ tree ~/skills
+                </p>
+                <div class="skills-tree">
+                    <div class="skill-item">Backend Development</div>
+                    <div class="skill-item">PHP &amp; Composer</div>
+                    <div class="skill-item">Go Programming</div>
+                    <div class="skill-item">DevOps &amp; CI/CD</div>
+                    <div class="skill-item">Database Design</div>
+                    <div class="skill-item">Network Administration</div>
+                    <div class="skill-item">IoT &amp; Home Automation</div>
+                    <div class="skill-item">Git &amp; Version Control</div>
+                </div>
+                <div class="divider">
+                    --------------------------------------------------------------------------------
+                </div>
+                <p style="color: var(--terminal-green-dark); font-size: 0.9em">
+                    &gt; Type 'skills' in the terminal for a quick reference
+                </p>
+            </section>
+
+            <section id="projects">
+                <div class="section-header">$ ls -la ~/projects/</div>
+                <div class="divider">
+                    --------------------------------------------------------------------------------
+                </div>
+                <div class="project-grid">
+                    <div class="project-card">
+                        <div class="project-header">
+                            drwxr-xr-x E-Commerce Platform
+                        </div>
+                        <div class="project-status">[production]</div>
+                        <p>
+                            Full-stack B2B e-commerce solution with advanced
+                            search and inventory management
+                        </p>
+                        <div class="project-tech">
+                            &gt; Tech: PHP, Go, MySQL, Redis
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-header">
+                            drwxr-xr-x Home Automation Dashboard
+                        </div>
+                        <div class="project-status">[active]</div>
+                        <p>
+                            IoT control center for smart home devices with
+                            real-time monitoring
+                        </p>
+                        <div class="project-tech">
+                            &gt; Tech: Node.js, Home Assistant, WebSockets
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-header">
+                            drwxr-xr-x DevOps Automation Suite
+                        </div>
+                        <div class="project-status">[maintained]</div>
+                        <p>
+                            Collection of tools for automated deployments and
+                            release management
+                        </p>
+                        <div class="project-tech">
+                            &gt; Tech: Go, Bash, Docker, GitHub Actions
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-header">
+                            drwxr-xr-x API Gateway Service
+                        </div>
+                        <div class="project-status">[beta]</div>
+                        <p>
+                            High-performance authentication and routing layer
+                            for microservices
+                        </p>
+                        <div class="project-tech">
+                            &gt; Tech: Go, Keycloak, PostgreSQL
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="blog">
+                <div class="section-header">$ ls -lt ~/blog/*.md</div>
+                <div class="divider">
+                    --------------------------------------------------------------------------------
+                </div>
+                <div class="blog-list">
+                    <div class="blog-post" data-post="0">
+                        <div class="blog-date">
+                            -rw-r--r-- 1 user staff 2048 Nov 15 2025
+                        </div>
+                        <div class="blog-title">
+                            Implementing Repository Pattern in PHP
+                        </div>
+                        <div class="blog-excerpt">
+                            Exploring clean architecture patterns and database
+                            abstraction layers in modern PHP applications...
+                        </div>
+                    </div>
+                    <div class="blog-post" data-post="1">
+                        <div class="blog-date">
+                            -rw-r--r-- 1 user staff 1856 Nov 10 2025
+                        </div>
+                        <div class="blog-title">
+                            Building Scalable APIs with Go
+                        </div>
+                        <div class="blog-excerpt">
+                            Best practices for designing RESTful APIs using Go's
+                            standard library and popular frameworks...
+                        </div>
+                    </div>
+                    <div class="blog-post" data-post="2">
+                        <div class="blog-date">
+                            -rw-r--r-- 1 user staff 2304 Nov 03 2025
+                        </div>
+                        <div class="blog-title">
+                            DevOps Automation: Streamlining Releases
+                        </div>
+                        <div class="blog-excerpt">
+                            How I automated our release process using git-cliff,
+                            goreleaser, and automated tagging strategies...
+                        </div>
+                    </div>
+                    <div class="blog-post" data-post="3">
+                        <div class="blog-date">
+                            -rw-r--r-- 1 user staff 1920 Oct 28 2025
+                        </div>
+                        <div class="blog-title">
+                            Smart Home Network Architecture
+                        </div>
+                        <div class="blog-excerpt">
+                            Designing a secure and efficient network topology
+                            for IoT devices using VLANs and firewall rules...
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="contact">
+                <div class="section-header">$ ./contact.sh</div>
+                <div class="divider">
+                    --------------------------------------------------------------------------------
+                </div>
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <label class="form-label">&gt; Enter your name:</label>
+                        <input
+                            type="text"
+                            class="form-input"
+                            name="name"
+                            required
+                            placeholder="John Doe"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">&gt; Enter your email:</label>
+                        <input
+                            type="email"
+                            class="form-input"
+                            name="email"
+                            required
+                            placeholder="john@example.com"
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label"
+                        >&gt; Enter your message:</label>
+                        <textarea
+                            class="form-textarea"
+                            name="message"
+                            required
+                            placeholder="Your message here..."
+                        ></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        $ ./send_message.sh
+                    </button>
+                </form>
+
+                <div class="divider" style="margin-top: 40px">
+                    --------------------------------------------------------------------------------
+                </div>
+                <p style="color: var(--terminal-green-light); margin: 20px 0">
+                    $ ls -l ~/social_links/
+                </p>
+                <div class="social-links">
+                    <a
+                        href="https://github.com/username"
+                        class="social-link"
+                        target="_blank"
+                    >lrwxr-xr-x github -&gt; https://github.com/username</a>
+                    <a
+                        href="https://linkedin.com/in/username"
+                        class="social-link"
+                        target="_blank"
+                    >lrwxr-xr-x linkedin -&gt;
+                        https://linkedin.com/in/username</a>
+                    <a href="mailto:dev@example.com" class="social-link"
+                    >lrwxr-xr-x email -&gt; dev@example.com</a>
+                </div>
+            </section>
+        </div>
+
+        <div class="terminal-widget" id="terminalWidget">
+            <div class="terminal-header" id="terminalHeader">
+                <span>mini-terminal</span>
+                <span style="cursor: pointer">[ _ ]</span>
+            </div>
+            <div class="terminal-output" id="terminalOutput">
+                <div
+                    class="output-line"
+                    style="color: var(--terminal-green-light)"
+                >
+                    Welcome to mini-terminal v1.0
+                </div>
+                <div class="output-line">
+                    Type 'help' for available commands
+                </div>
+            </div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">$</span>
+                <input
+                    type="text"
+                    class="terminal-input"
+                    id="terminalInput"
+                    placeholder="type command..."
+                >
+            </div>
+        </div>
+
+        <div class="modal" id="blogModal">
+            <div class="modal-content">
+                <button class="modal-close" id="modalClose">[X]</button>
+                <div id="blogModalContent"></div>
+            </div>
+        </div>
+
+        <script>
+            // Starfield animation
+            const canvas = document.getElementById("starfield");
+            const ctx = canvas.getContext("2d");
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const stars = [];
+            const numStars = 200;
+
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5,
+                    speed: Math.random() * 0.5 + 0.1,
+                });
+            }
+
+            function drawStars() {
+                ctx.clearRect(
+                    0,
+                    0,
+                    canvas.width,
+                    canvas.height,
+                );
+                ctx.fillStyle = "#FFFFFF";
+
+                stars.forEach((star) => {
+                    ctx.beginPath();
+                    ctx.arc(
+                        star.x,
+                        star.y,
+                        star.radius,
+                        0,
+                        Math.PI * 2,
+                    );
+                    ctx.fill();
+
+                    star.y += star.speed;
+                    if (star.y > canvas.height) {
+                        star.y = 0;
+                        star.x = Math.random() * canvas.width;
+                    }
+                });
+
+                requestAnimationFrame(drawStars);
+            }
+
+            drawStars();
+
+            window.addEventListener("resize", () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(
+                (anchor) => {
+                    anchor.addEventListener(
+                        "click",
+                        function (e) {
+                            e.preventDefault();
+                            const target = document
+                                .querySelector(
+                                    this.getAttribute("href"),
+                                );
+                            if (target) {
+                                target.scrollIntoView({
+                                    behavior: "smooth",
+                                    block: "start",
+                                });
+                            }
+                        },
+                    );
+                },
+            );
+
+            // Terminal widget
+            const terminalWidget = document.getElementById(
+                "terminalWidget",
+            );
+            const terminalHeader = document.getElementById(
+                "terminalHeader",
+            );
+            const terminalInput = document.getElementById(
+                "terminalInput",
+            );
+            const terminalOutput = document.getElementById(
+                "terminalOutput",
+            );
+
+            terminalHeader.addEventListener("click", () => {
+                terminalWidget.classList.toggle("minimized");
+            });
+
+            const commands = {
+                help:
+                    "Available commands: whoami, skills, projects, blog, contact, date, clear",
+                whoami:
+                    "Software Developer specializing in backend systems and DevOps",
+                skills:
+                    "Backend Development, PHP & Composer, Go Programming, DevOps & CI/CD, Database Design, Network Administration, IoT & Home Automation, Git & Version Control",
+                projects:
+                    "4 projects found: E-Commerce Platform, Home Automation Dashboard, DevOps Automation Suite, API Gateway Service",
+                blog:
+                    "4 blog posts available. Check the blog section above.",
+                contact:
+                    "Email: dev@example.com | GitHub: github.com/username | LinkedIn: linkedin.com/in/username",
+                date: new Date().toString(),
+                clear: "CLEAR",
+            };
+
+            terminalInput.addEventListener("keypress", (e) => {
+                if (e.key === "Enter") {
+                    const command = terminalInput.value.trim()
+                        .toLowerCase();
+                    const outputLine = document.createElement(
+                        "div",
+                    );
+                    outputLine.className = "output-line";
+                    outputLine.innerHTML =
+                        `<span style="color: var(--terminal-green-light);">$ ${terminalInput.value}</span>`;
+                    terminalOutput.appendChild(outputLine);
+
+                    if (command === "clear") {
+                        terminalOutput.innerHTML = "";
+                    } else if (commands[command]) {
+                        const responseLine = document
+                            .createElement("div");
+                        responseLine.className = "output-line";
+                        responseLine.textContent =
+                            commands[command];
+                        terminalOutput.appendChild(
+                            responseLine,
+                        );
+                    } else if (command) {
+                        const errorLine = document
+                            .createElement("div");
+                        errorLine.className = "output-line";
+                        errorLine.style.color = "#FF5555";
+                        errorLine.textContent =
+                            `Command not found: ${command}`;
+                        terminalOutput.appendChild(errorLine);
+                    }
+
+                    terminalInput.value = "";
+                    terminalOutput.scrollTop =
+                        terminalOutput.scrollHeight;
+                }
+            });
+
+            // Blog modal
+            const blogPosts = [
+                {
+                    title:
+                        "Implementing Repository Pattern in PHP",
+                    date: "November 15, 2025",
+                    content:
+                        `The Repository Pattern is a design pattern that mediates between the domain and data mapping layers. In this post, I'll explore how to implement this pattern in modern PHP applications.\n\nKey Benefits:\n• Separation of concerns\n• Testability improvements\n• Database abstraction\n• Cleaner code organization\n\nImplementation example:\n\ninterface UserRepositoryInterface {\n    public function findById($id);\n    public function save($user);\n    public function delete($user);\n}\n\nclass UserRepository implements UserRepositoryInterface {\n    // Implementation details...\n}\n\nThis pattern allows us to swap implementations easily and write cleaner, more maintainable code.`,
+                },
+                {
+                    title: "Building Scalable APIs with Go",
+                    date: "November 10, 2025",
+                    content:
+                        `Go's simplicity and performance make it an excellent choice for building scalable APIs. Here are some best practices I've learned.\n\nKey Principles:\n• Use context for timeouts and cancellation\n• Implement proper error handling\n• Structure your code with clean architecture\n• Use middleware for cross-cutting concerns\n\nExample middleware pattern:\n\nfunc Logger(next http.Handler) http.Handler {\n    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n        start := time.Now()\n        next.ServeHTTP(w, r)\n        log.Printf("%s %s %v", r.Method, r.URL.Path, time.Since(start))\n    })\n}\n\nWith Go's standard library and some well-chosen packages, you can build production-ready APIs quickly.`,
+                },
+                {
+                    title:
+                        "DevOps Automation: Streamlining Releases",
+                    date: "November 3, 2025",
+                    content:
+                        `Automating release processes saves time and reduces errors. Here's how I streamlined our deployment pipeline.\n\nTools Used:\n• git-cliff for changelog generation\n• goreleaser for Go binary releases\n• GitHub Actions for CI/CD\n• Semantic versioning for consistency\n\nWorkflow Overview:\n1. Developer creates PR\n2. CI runs tests and linting\n3. On merge to main, auto-tag based on commits\n4. goreleaser builds and publishes\n5. git-cliff generates changelog\n6. Deploy to staging automatically\n\nThis setup reduced our release time from hours to minutes and improved reliability significantly.`,
+                },
+                {
+                    title: "Smart Home Network Architecture",
+                    date: "October 28, 2025",
+                    content:
+                        `Designing a secure smart home network requires careful planning. Here's my approach to isolating IoT devices.\n\nNetwork Segmentation:\n• VLAN 10: Trusted devices (computers, phones)\n• VLAN 20: IoT devices (cameras, sensors)\n• VLAN 30: Guest network\n\nSecurity Measures:\n• Firewall rules blocking IoT -> Trusted traffic\n• mDNS reflector for cross-VLAN discovery\n• Pi-hole for DNS filtering\n• Regular firmware updates\n\nHome Assistant Integration:\nHome Assistant sits on the trusted network with firewall rules allowing it to communicate with IoT devices. This gives us control without exposing our main network.\n\nResult: A secure, efficient smart home network that doesn't compromise on functionality.`,
+                },
+            ];
+
+            const blogModal = document.getElementById(
+                "blogModal",
+            );
+            const blogModalContent = document.getElementById(
+                "blogModalContent",
+            );
+            const modalClose = document.getElementById(
+                "modalClose",
+            );
+
+            document.querySelectorAll(".blog-post").forEach(
+                (post) => {
+                    post.addEventListener("click", () => {
+                        const postIndex = post.getAttribute(
+                            "data-post",
+                        );
+                        const postData = blogPosts[postIndex];
+
+                        blogModalContent.innerHTML = `
+                    <div class="section-header">$ cat ~/blog/${
+                            postData.title.toLowerCase()
+                                .replace(/\s+/g, "_")
+                        }.md</div>
+                    <div class="divider">--------------------------------------------------------------------------------</div>
+                    <div style="color: var(--terminal-green-dark); margin-bottom: 20px;">${postData.date}</div>
+                    <h2 style="color: var(--terminal-green-light); margin-bottom: 20px;">${postData.title}</h2>
+                    <div style="white-space: pre-line; line-height: 1.8;">${postData.content}</div>
+                `;
+
+                        blogModal.classList.add("active");
+                    });
+                },
+            );
+
+            modalClose.addEventListener("click", () => {
+                blogModal.classList.remove("active");
+            });
+
+            blogModal.addEventListener("click", (e) => {
+                if (e.target === blogModal) {
+                    blogModal.classList.remove("active");
+                }
+            });
+
+            // Contact form
+            document.getElementById("contactForm")
+                .addEventListener(
+                    "submit",
+                    (e) => {
+                        e.preventDefault();
+                        const formData = new FormData(e.target);
+                        const name = formData.get("name");
+                        const email = formData.get("email");
+                        const message = formData.get("message");
+
+                        // Simulate form submission
+                        alert(
+                            `Message sent!\n\n> From: ${name}\n> Email: ${email}\n> Message: ${message}\n\n[This is a demo - no actual message was sent]`,
+                        );
+                        e.target.reset();
+                    },
+                );
+        </script>
+    </body>
+</html>

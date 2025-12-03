@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"html/template"
+	"io/fs"
 	"log/slog"
 	"net/http"
 	"os"
@@ -80,6 +81,7 @@ func (s *Server) setupRoutes() {
 	s.router.Get("/", s.handleGetHome)
 	s.router.Get("/posts", s.handleListPosts)
 	s.router.Get("/posts/{slug}", s.handleGetPost)
+	s.router.Get("/example", s.handleExample)
 
 	// API routes
 	s.router.Route("/api", func(r chi.Router) {
@@ -90,7 +92,7 @@ func (s *Server) setupRoutes() {
 		r.Get("/skills/partial", s.handleSkillsPartial)
 		r.Post("/theme", s.handleThemeSwitch)
 	})
-
+	//
 	// Health check
 	s.router.Get("/health", s.handleHealth)
 }
@@ -138,10 +140,7 @@ func (s *Server) handleHealth(w http.ResponseWriter, r *http.Request) {
 }
 
 // handleGetData handles GET /api/data requests
-func (s *Server) handleGetData(
-	w http.ResponseWriter,
-	r *http.Request,
-) {
+func (s *Server) handleGetData(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
@@ -210,15 +209,30 @@ func (s *Server) handleGetPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) renderTemplate(name string, data any) ([]byte, error) {
-	themePath := fmt.Sprintf("templates/theme/%s/%s.html", s.config.DefaultTheme, name)
-	tmpl, err := template.ParseFiles(themePath)
+	themePath := fmt.Sprintf("themes/%s/default/%s.html", s.config.DefaultTheme, name)
+
+	// Read template from embedded assets
+	templateContent, err := s.assetManager.Assets.ReadFile(themePath)
 	if err != nil {
+		s.logger.Error("failed to read template", "path", themePath, "error", err)
+		return nil, err
+	}
+
+	// Parse and execute template
+	tmpl, err := template.New(name).Parse(string(templateContent))
+	if err != nil {
+		s.logger.Error("failed to parse template", "path", themePath, "error", err)
 		return nil, err
 	}
 
 	var buf bytes.Buffer
 	err = tmpl.Execute(&buf, data)
-	return buf.Bytes(), err
+	if err != nil {
+		s.logger.Error("failed to execute template", "path", themePath, "error", err)
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
 }
 
 func (s *Server) handleGetHome(w http.ResponseWriter, r *http.Request) {
@@ -335,4 +349,20 @@ func (s *Server) handleThemeSwitch(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("HX-Redirect", "/")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, "<!-- Theme switched -->")
+}
+
+// handleExample handles GET /example and serves the example.html reference design
+func (s *Server) handleExample(w http.ResponseWriter, r *http.Request) {
+	exampleContent, err := fs.ReadFile(s.assetManager.Assets, "example.html")
+	if err != nil {
+		s.logger.Error("failed to read example.html", "error", err)
+		w.WriteHeader(http.StatusNotFound)
+		w.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprint(w, "<h1>Not Found</h1><p>example.html not found</p>")
+		return
+	}
+
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.Header().Set("Cache-Control", "public, max-age=3600")
+	w.Write(exampleContent)
 }

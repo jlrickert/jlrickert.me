@@ -5,9 +5,14 @@
     <div class="blog-title">{{.Title}}</div>
     <div class="blog-excerpt">{{.Description}}</div>
     {{if .Tags}}
-    <div class="blog-tags" style="margin-top: 10px; color: var(--terminal-green-dark); font-size: 0.9em;">
+    <div class="blog-tags" style="margin-top: 10px; color: var(--terminal-green-dark); font-size: 0.9em">
         {{range .Tags}}
-        <span hx-get="/api/posts/partial?tag={{.}}" hx-target="#posts-list" class="tag-link" style="margin-right: 8px; cursor: pointer;">
+        <span
+            hx-get="/api/posts/partial?tag={{.}}"
+            hx-target="#posts-list"
+            class="tag-link"
+            style="margin-right: 8px; cursor: pointer"
+        >
             #{{.}}
         </span>
         {{end}}
