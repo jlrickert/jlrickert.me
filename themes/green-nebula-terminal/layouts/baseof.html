@@ -8,6 +8,8 @@
             {{ partial "header.html" . }}
         </header>
         <main>
+            <canvas id="starfield"></canvas>
+            <div class="scanline"></div>
             {{ block "main" . }}{{ end }}
         </main>
         <footer>
