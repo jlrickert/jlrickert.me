@@ -1,0 +1,182 @@
+{
+  "name": "Jared Rickert",
+  "title": "Software Engineer - Full Stack Developer",
+  "location": "Minneapolis, MN",
+  "phone": "(320) 360-8538",
+  "email": "jaredrickert52@gmail.com",
+  "linkedin": "https://www.linkedin.com/in/jaredrickert/",
+  "portfolio": "https://www.jlrickert.me",
+  "summary": "Versatile Software Engineer with 4+ years of experience across\nfull-stack development, DevOps, and systems administration. Proven\nability to design, implement, and stabilize production sites\nend-to-end, improve performance and security, and accelerate\ndeveloper workflows. Strong practical experience with PHP, Go,\nTypeScript/JavaScript (React/Angular), AWS, Keycloak (CIAM),\nSEO/analytics, containerization, and CI/CD. AWS Certified\nDeveloper.\n",
+  "experience": [
+    {
+      "title": "Web Developer",
+      "company": "Ecreative",
+      "location": "St. Louis Park, MN (remote)",
+      "start_date": "April 2024",
+      "current": true,
+      "highlights": [
+        "Design, implement, and stabilize production sites end-to-end",
+        "Implemented MFA and Keycloak for CIAM",
+        "Built privacy/consent solutions (GDPR/CCPA)",
+        "Hardened security; reduced spam/abuse incidents",
+        "Improved performance via WebP, caching strategies",
+        "SEO improvements with JSON-LD, sitemaps, GA4",
+        "Built AI-powered CMS developer tool (~30% acceleration)"
+      ],
+      "technologies": "PHP, MySQL, JavaScript, GTM/GA4, Keycloak, reCAPTCHA, Bash, Proxmox, FreeBSD"
+    },
+    {
+      "title": "Full Stack Engineer",
+      "company": "Br8kthru Consulting",
+      "location": "Minneapolis, MN",
+      "start_date": "May 2023",
+      "end_date": "August 2023",
+      "highlights": [
+        "Built custom WordPress themes",
+        "Implemented responsive, high-performance client sites",
+        "Provided IT administration and system support"
+      ]
+    },
+    {
+      "title": "Software Development Engineer",
+      "company": "Up 'n go",
+      "location": "San Diego, CA (remote)",
+      "start_date": "July 2022",
+      "end_date": "January 2023",
+      "highlights": [
+        "Integrated multiple third-party payment vendor APIs",
+        "Built admin portal features",
+        "Developed customer-facing payment interfaces",
+        "Resolved production issues",
+        "Maintained GitHub Actions CI/CD pipelines"
+      ],
+      "technologies": "Angular, TypeScript, MongoDB, Redis, Docker, Bash, WebSockets"
+    },
+    {
+      "title": "Full Stack Software Developer",
+      "company": "Ecreativeworks",
+      "location": "Minneapolis, MN",
+      "start_date": "August 2020",
+      "end_date": "May 2022",
+      "highlights": [
+        "Led implementation of core CMS features",
+        "Mentored junior developers",
+        "Resolved performance bottlenecks"
+      ],
+      "technologies": "Go, AWS Lambda, React, TypeScript, Zustand"
+    },
+    {
+      "title": "DevOps Engineer Intern",
+      "company": "Protolabs",
+      "location": "Maple Plain, MN",
+      "start_date": "May 2019",
+      "end_date": "August 2019",
+      "highlights": [
+        "Automated infrastructure tasks with Chef",
+        "Designed containerized data aggregation tool",
+        "Participated in Agile sprints"
+      ]
+    },
+    {
+      "title": "Programmer Intern",
+      "company": "Great North Labs",
+      "location": "St. Cloud, MN",
+      "start_date": "June 2017",
+      "end_date": "July 2017",
+      "highlights": [
+        "Designed mobile app backend and REST API"
+      ],
+      "technologies": "Django REST Framework, PostgreSQL"
+    },
+    {
+      "title": "Programmer",
+      "company": "Deerwood Bank",
+      "location": "Baxter, MN",
+      "start_date": "June 2016",
+      "end_date": "August 2016",
+      "highlights": [
+        "Built scripts and MS-SQL database for access management",
+        "Employed TDD for automation tooling"
+      ],
+      "technologies": "Python 3, SQLAlchemy, Visual Basic, SQL Server"
+    }
+  ],
+  "skills": {
+    "languages": [
+      "PHP",
+      "Go",
+      "TypeScript",
+      "JavaScript",
+      "Python",
+      "Bash",
+      "SQL",
+      "Perl",
+      "Visual Basic"
+    ],
+    "frontend": [
+      "React",
+      "Angular",
+      "jQuery",
+      "HTML5",
+      "CSS3",
+      "Zustand"
+    ],
+    "backend": [
+      "Node.js",
+      "Django REST Framework",
+      "AWS Lambda",
+      "API Gateway",
+      "Keycloak",
+      "Cognito"
+    ],
+    "cloud_devops": [
+      "AWS",
+      "Docker",
+      "Proxmox",
+      "Chef",
+      "GitHub Actions",
+      "CI/CD"
+    ],
+    "databases": [
+      "MySQL",
+      "PostgreSQL",
+      "MongoDB",
+      "Redis",
+      "MS-SQL"
+    ],
+    "tools": [
+      "Git",
+      "Jira",
+      "Postman",
+      "Agile Scrum",
+      "TDD"
+    ]
+  },
+  "education": [
+    {
+      "school": "Metropolitan State University",
+      "degree": "Computer Science",
+      "status": "Coursework",
+      "graduation": "2019-2020"
+    },
+    {
+      "school": "St. Cloud State University",
+      "degree": "Computer Science",
+      "status": "Coursework",
+      "graduation": "2015-2017"
+    },
+    {
+      "school": "Central Lakes College",
+      "degree": "AAS Engineering",
+      "graduation": 2014
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified Developer - Associate",
+      "issued": "November 2023",
+      "expires": "November 2026",
+      "credential_id": "b028d5d6a0884ccda64dda27b59bd4b1"
+    }
+  ]
+}
