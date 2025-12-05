@@ -11,30 +11,30 @@ import (
 )
 
 func TestNewAssetsManager(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	assert.NotNil(t, manager)
 }
 
 func TestGetPost(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "first-post")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "blog/first-post")
 
 	require.NoError(t, err)
 	assert.NotNil(t, post)
-	assert.Equal(t, "first-post", post.Slug)
+	assert.Equal(t, "first-post", post.Path)
 }
 
 func TestGetPostNotFound(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "nonexistent-post")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "blog/nonexistent-post")
 
 	assert.Error(t, err)
 	assert.Nil(t, post)
 }
 
 func TestGetPostContent(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "first-post")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "blog/first-post")
 
 	require.NoError(t, err)
 	assert.NotEmpty(t, post.Content)
@@ -42,8 +42,8 @@ func TestGetPostContent(t *testing.T) {
 }
 
 func TestGetPostMetadata(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "first-post")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "blog/first-post")
 
 	require.NoError(t, err)
 	assert.NotEmpty(t, post.Meta)
@@ -51,8 +51,8 @@ func TestGetPostMetadata(t *testing.T) {
 }
 
 func TestPostMetadata(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "first-post")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "blog/first-post")
 
 	require.NoError(t, err)
 	assert.Equal(t, "Welcome to My Blog", post.Title())
@@ -65,8 +65,8 @@ func TestPostMetadata(t *testing.T) {
 }
 
 func TestPostTags(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "first-post")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "blog/first-post")
 
 	require.NoError(t, err)
 	tags := post.Tags()
@@ -76,16 +76,16 @@ func TestPostTags(t *testing.T) {
 }
 
 func TestGetPostEmptySlug(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "")
 
 	assert.Error(t, err)
 	assert.Nil(t, post)
 }
 
 func TestContentIsRenderedHTML(t *testing.T) {
-	manager := NewAssetManager()
-	post, err := manager.GetPost(context.Background(), "first-post")
+	manager := NewAssetManager(DefaultTheme)
+	post, err := manager.GetPage(context.Background(), "blog/first-post")
 
 	require.NoError(t, err)
 	require.NotNil(t, post)
@@ -104,7 +104,7 @@ func TestContentIsRenderedHTML(t *testing.T) {
 }
 
 func TestGetData(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -112,7 +112,7 @@ func TestGetData(t *testing.T) {
 }
 
 func TestGetDataNotNil(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -122,7 +122,7 @@ func TestGetDataNotNil(t *testing.T) {
 }
 
 func TestGetDataBasicInfo(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -133,7 +133,7 @@ func TestGetDataBasicInfo(t *testing.T) {
 }
 
 func TestGetDataExperience(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -147,7 +147,7 @@ func TestGetDataExperience(t *testing.T) {
 }
 
 func TestGetDataSkills(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -161,7 +161,7 @@ func TestGetDataSkills(t *testing.T) {
 }
 
 func TestGetDataEducation(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -174,7 +174,7 @@ func TestGetDataEducation(t *testing.T) {
 }
 
 func TestGetDataCertifications(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -188,7 +188,7 @@ func TestGetDataCertifications(t *testing.T) {
 }
 
 func TestGetDataSummary(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)
@@ -197,7 +197,7 @@ func TestGetDataSummary(t *testing.T) {
 }
 
 func TestGetDataSocialLinks(t *testing.T) {
-	manager := NewAssetManager()
+	manager := NewAssetManager(DefaultTheme)
 	data, err := manager.GetData(context.Background())
 
 	require.NoError(t, err)

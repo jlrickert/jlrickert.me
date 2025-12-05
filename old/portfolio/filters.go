@@ -95,10 +95,7 @@ func timeAgo(dateStr string) string {
 // e.g., "go_programming" -> "Go Programming"
 func humanize(s string) string {
 	// Replace underscores and hyphens with spaces
-	s = strings.NewReplacer(
-		"_", " ",
-		"-", " ",
-	).Replace(s)
+	s = strings.NewReplacer("_", " ", "-", " ").Replace(s)
 
 	// Title case each word
 	return cases.Title(language.AmericanEnglish).String(strings.ToLower(s))

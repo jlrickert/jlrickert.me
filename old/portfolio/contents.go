@@ -5,7 +5,9 @@ import (
 	"context"
 	"embed"
 	"fmt"
+	"html/template"
 	"io/fs"
+	"log/slog"
 	"maps"
 	"path/filepath"
 
@@ -13,43 +15,61 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+const DefaultTheme = "green-nebula-terminal"
+
 // AssetManager manages embedded assets including posts and data files.
 type AssetManager struct {
 	Assets embed.FS
+	Logger *slog.Logger
 }
 
 // NewAssetManager creates and returns a new AssetManager instance.
-func NewAssetManager() *AssetManager {
+func NewAssetManager(theme string) *AssetManager {
 	return &AssetManager{Assets: jlrickert.Assets}
 }
 
-// GetPost retrieves and parses a post by slug, converting its markdown
+// GetPage retrieves and parses a post by slug, converting its markdown
 // content to HTML.
-func (m *AssetManager) GetPost(ctx context.Context, slug string) (*Post, error) {
-	data, err := fs.ReadFile(m.Assets, filepath.Join("data", "posts", slug+".md"))
+func (m *AssetManager) GetPage(ctx context.Context, path string) (*Page, error) {
+	fp := filepath.Join("content", path)
+
+	data, err := fs.ReadFile(m.Assets, fp)
 	if err != nil {
 		return nil, fmt.Errorf(
 			"slug \"%s\" does not exist: %w",
-			slug,
+			path,
 			err,
 		)
 	}
 
-	meta, content, err := m.parseFrontmatter(data)
-	if err != nil {
-		return nil, err
-	}
+	ext := filepath.Ext(fp)
 
-	var buf bytes.Buffer
-	if err := Markdown.Convert(content, &buf); err != nil {
-		return nil, err
-	}
+	switch ext {
+	case "md":
+		meta, content, err := m.parseFrontmatter(data)
+		if err != nil {
+			return nil, err
+		}
+		var buf bytes.Buffer
+		if err := Markdown.Convert(content, &buf); err != nil {
+			return nil, err
+		}
 
-	return &Post{
-		Slug:    slug,
-		Content: buf.Bytes(),
-		Meta:    meta,
-	}, nil
+		return &Page{
+			Path:    path,
+			Type:    "markdown",
+			Content: buf.Bytes(),
+			Meta:    meta,
+		}, nil
+	case "html":
+		return &Page{
+			Path:    path,
+			Type:    "html",
+			Content: data,
+			Meta:    map[string]any{},
+		}, nil
+	}
+	return nil, fmt.Errorf("%s is unsupported", path)
 }
 
 // GetData retrieves and parses the data.yaml file into a Data struct.
@@ -65,15 +85,32 @@ func (m *AssetManager) GetData(ctx context.Context) (*Data, error) {
 	return LoadData(data)
 }
 
-func (m *AssetManager) GetTemplate(theme, name string) (string, error) {
+// GetTemplateContent retrieves raw template file contents without parsing
+func (m *AssetManager) GetTemplateContent(theme, name string) ([]byte, error) {
+	path := fmt.Sprintf("themes/%s/default/%s.html", theme, name)
+	content, err := m.Assets.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read template file %s: %w", path, err)
+	}
+	return content, nil
+}
+
+func (m *AssetManager) GetTemplate(theme, name string) (*template.Template, error) {
 	path := fmt.Sprintf("themes/%s/default/%s.html", theme, name)
 	content, err := m.Assets.ReadFile(path)
 	if err != nil {
 		// Fallback to default theme
-		path = fmt.Sprintf("themes/green-nebula-terminal/default/%s.html", name)
+		path = fmt.Sprintf("themes/%s/default/%s.html", theme, name)
 		content, err = m.Assets.ReadFile(path)
 	}
-	return string(content), err
+
+	tmpl, err := template.New(name).Funcs(TemplateFuncs()).Parse(string(content))
+	if err != nil {
+		m.Logger.Error("failed to parse base template", "template", "_base", "error", err)
+		return nil, err
+	}
+
+	return tmpl, err
 }
 
 // parseFrontmatter extracts YAML frontmatter from markdown content.

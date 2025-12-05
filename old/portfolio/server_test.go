@@ -20,14 +20,14 @@ func TestNewServer(t *testing.T) {
 		WriteTimeout:   10 * time.Second,
 		IdleTimeout:    120 * time.Second,
 		MaxHeaderBytes: 1 << 20,
-		DefaultTheme:   "green-nebula-terminal",
+		Theme:          "green-nebula-terminal",
 	}
 
 	server := NewServer(config, nil)
 
 	require.NotNil(t, server)
 	assert.Equal(t, config.Addr, server.config.Addr)
-	assert.Equal(t, config.DefaultTheme, server.config.DefaultTheme)
+	assert.Equal(t, config.Theme, server.config.Theme)
 	assert.NotNil(t, server.router)
 	assert.NotNil(t, server.assetManager)
 	assert.NotNil(t, server.logger)
@@ -51,7 +51,7 @@ func TestHandleHealth(t *testing.T) {
 
 func TestHandleGetHome(t *testing.T) {
 	config := DefaultServerConfig()
-	config.DefaultTheme = "green-nebula-terminal"
+	config.Theme = "green-nebula-terminal"
 	server := NewServer(config, nil)
 
 	req := httptest.NewRequest("GET", "/", nil)
@@ -297,33 +297,142 @@ func TestServerShutdown(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestHandleStatic(t *testing.T) {
+	tests := []struct {
+		name           string
+		path           string
+		expectedStatus int
+		expectedType   string
+	}{
+		{
+			name:           "CSS file",
+			path:           "/static/css/stylesheet.css",
+			expectedStatus: http.StatusOK,
+			expectedType:   "text/css; charset=utf-8",
+		},
+		{
+			name:           "JavaScript file",
+			path:           "/static/js/starfield.js",
+			expectedStatus: http.StatusOK,
+			expectedType:   "application/javascript; charset=utf-8",
+		},
+		{
+			name:           "Nonexistent static file",
+			path:           "/static/nonexistent.txt",
+			expectedStatus: http.StatusNotFound,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			config := DefaultServerConfig()
+			config.Theme = "green-nebula-terminal"
+			server := NewServer(config, nil)
+
+			req := httptest.NewRequest("GET", tt.path, nil)
+			w := httptest.NewRecorder()
+
+			server.router.ServeHTTP(w, req)
+
+			assert.Equal(t, tt.expectedStatus, w.Code)
+
+			if tt.expectedStatus == http.StatusOK {
+				assert.Equal(t, tt.expectedType, w.Header().Get("Content-Type"))
+				assert.Contains(t, w.Header().Get("Cache-Control"), "max-age")
+
+				body, _ := io.ReadAll(w.Body)
+				assert.NotEmpty(t, body)
+			}
+		})
+	}
+}
+
+func TestGetContentType(t *testing.T) {
+	tests := []struct {
+		filePath     string
+		expectedType string
+	}{
+		{
+			filePath:     "style.css",
+			expectedType: "text/css; charset=utf-8",
+		},
+		{
+			filePath:     "script.js",
+			expectedType: "application/javascript; charset=utf-8",
+		},
+		{
+			filePath:     "data.json",
+			expectedType: "application/json",
+		},
+		{
+			filePath:     "icon.svg",
+			expectedType: "image/svg+xml",
+		},
+		{
+			filePath:     "image.png",
+			expectedType: "image/png",
+		},
+		{
+			filePath:     "photo.jpg",
+			expectedType: "image/jpeg",
+		},
+		{
+			filePath:     "photo.jpeg",
+			expectedType: "image/jpeg",
+		},
+		{
+			filePath:     "animation.gif",
+			expectedType: "image/gif",
+		},
+		{
+			filePath:     "font.woff",
+			expectedType: "font/woff",
+		},
+		{
+			filePath:     "font.woff2",
+			expectedType: "font/woff2",
+		},
+		{
+			filePath:     "unknown.xyz",
+			expectedType: "application/octet-stream",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.filePath, func(t *testing.T) {
+			result := getContentType(tt.filePath)
+			assert.Equal(t, tt.expectedType, result)
+		})
+	}
+}
+
 func TestCacheHeaders(t *testing.T) {
 	config := DefaultServerConfig()
 	server := NewServer(config, nil)
 
 	tests := []struct {
-		name              string
-		path              string
-		expectedHeader    string
-		checkHeader       bool
+		name           string
+		path           string
+		expectedHeader string
+		checkHeader    bool
 	}{
 		{
-			name:              "home page cache control",
-			path:              "/",
-			expectedHeader:    "public, max-age=3600",
-			checkHeader:       false, // Home page may fail to render in tests
+			name:           "home page cache control",
+			path:           "/",
+			expectedHeader: "public, max-age=3600",
+			checkHeader:    false, // Home page may fail to render in tests
 		},
 		{
-			name:              "health check no cache",
-			path:              "/health",
-			expectedHeader:    "",
-			checkHeader:       true,
+			name:           "health check no cache",
+			path:           "/health",
+			expectedHeader: "",
+			checkHeader:    true,
 		},
 		{
-			name:              "data api cache control",
-			path:              "/api/data",
-			expectedHeader:    "public, max-age=3600",
-			checkHeader:       true,
+			name:           "data api cache control",
+			path:           "/api/data",
+			expectedHeader: "public, max-age=3600",
+			checkHeader:    true,
 		},
 	}
 

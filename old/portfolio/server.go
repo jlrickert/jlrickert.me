@@ -10,6 +10,8 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -24,7 +26,7 @@ type ServerConfig struct {
 	IdleTimeout    time.Duration
 	MaxHeaderBytes int
 
-	DefaultTheme string
+	Theme string
 }
 
 // DefaultServerConfig returns sensible defaults for ServerConfig
@@ -35,6 +37,7 @@ func DefaultServerConfig() ServerConfig {
 		WriteTimeout:   10 * time.Second,
 		IdleTimeout:    120 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 1 MB
+		Theme:          DefaultTheme,
 	}
 }
 
@@ -66,9 +69,11 @@ func NewServer(config ServerConfig, logger *slog.Logger) *Server {
 	server := &Server{
 		config:       config,
 		router:       r,
-		assetManager: NewAssetManager(),
+		assetManager: NewAssetManager(config.Theme),
 		logger:       logger,
 	}
+
+	server.assetManager.Logger = logger
 
 	server.setupRoutes()
 	server.setupHTTPServer()
@@ -82,6 +87,9 @@ func (s *Server) setupRoutes() {
 	s.router.Get("/posts", s.handleListPosts)
 	s.router.Get("/posts/{slug}", s.handleGetPost)
 	s.router.Get("/example", s.handleExample)
+
+	// Static files
+	s.router.Get("/static/*", s.handleStatic)
 
 	// API routes
 	s.router.Route("/api", func(r chi.Router) {
@@ -183,7 +191,7 @@ func (s *Server) handleGetPost(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
 	defer cancel()
 
-	post, err := s.assetManager.GetPost(ctx, slug)
+	post, err := s.assetManager.GetPage(ctx, slug)
 	if err != nil {
 		s.logger.Error(
 			"failed to get post",
@@ -200,7 +208,7 @@ func (s *Server) handleGetPost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Cache-Control", "public, max-age=3600")
 	json.NewEncoder(w).Encode(map[string]any{
-		"slug":    post.Slug,
+		"slug":    post.Path,
 		"title":   post.Title(),
 		"content": string(post.Content),
 		"date":    post.Date(),
@@ -209,26 +217,38 @@ func (s *Server) handleGetPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) renderTemplate(name string, data any) ([]byte, error) {
-	themePath := fmt.Sprintf("themes/%s/default/%s.html", s.config.DefaultTheme, name)
-
-	// Read template from embedded assets
-	templateContent, err := s.assetManager.Assets.ReadFile(themePath)
+	// Load base template content
+	baseContent, err := s.assetManager.GetTemplateContent(s.config.Theme, "_base")
 	if err != nil {
-		s.logger.Error("failed to read template", "path", themePath, "error", err)
+		s.logger.Error("failed to get base template", "error", err)
 		return nil, err
 	}
 
-	// Parse and execute template with custom functions
-	tmpl, err := template.New(name).Funcs(TemplateFuncs()).Parse(string(templateContent))
+	// Load content template content
+	contentContent, err := s.assetManager.GetTemplateContent(s.config.Theme, name)
 	if err != nil {
-		s.logger.Error("failed to parse template", "path", themePath, "error", err)
+		s.logger.Error("failed to get content template", "name", name, "error", err)
+		return nil, err
+	}
+
+	// Parse base template with custom functions
+	baseTmpl, err := template.New("base").Funcs(TemplateFuncs()).Parse(string(baseContent))
+	if err != nil {
+		s.logger.Error("failed to parse base template", "error", err)
+		return nil, err
+	}
+
+	// Parse content template and associate with base
+	baseTmpl, err = baseTmpl.New("content").Parse(string(contentContent))
+	if err != nil {
+		s.logger.Error("failed to parse content template", "name", name, "error", err)
 		return nil, err
 	}
 
 	var buf bytes.Buffer
-	err = tmpl.Execute(&buf, data)
+	err = baseTmpl.Execute(&buf, data)
 	if err != nil {
-		s.logger.Error("failed to execute template", "path", themePath, "error", err)
+		s.logger.Error("failed to execute template", "error", err)
 		return nil, err
 	}
 
@@ -248,9 +268,9 @@ func (s *Server) handleGetHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	html, err := s.renderTemplate("home", data)
+	html, err := s.renderTemplate("index", data)
 	if err != nil {
-		s.logger.Error("failed to render home template", "error", err)
+		s.logger.Error("failed to render index template", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Header().Set("Content-Type", "text/html; charset=utf-8")
 		fmt.Fprint(w, "<h1>Error</h1><p>Failed to render page</p>")
@@ -365,4 +385,57 @@ func (s *Server) handleExample(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.Header().Set("Cache-Control", "public, max-age=3600")
 	w.Write(exampleContent)
+}
+
+// handleStatic handles GET /static/* for serving static files (CSS, JS, etc.)
+func (s *Server) handleStatic(w http.ResponseWriter, r *http.Request) {
+	// Get the static file path from the URL
+	// Format: /static/css/stylesheet.css -> themes/green-nebula-terminal/static/css/stylesheet.css
+	staticPath := chi.URLParam(r, "*")
+	if staticPath == "" {
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	filePath := filepath.Join("themes", s.config.Theme, "static", staticPath)
+
+	// Read file from embedded assets
+	content, err := fs.ReadFile(s.assetManager.Assets, filePath)
+	if err != nil {
+		s.logger.Error("failed to read static file", "path", filePath, "error", err)
+		w.WriteHeader(http.StatusNotFound)
+		return
+	}
+
+	// Set content type based on file extension
+	contentType := getContentType(filePath)
+	w.Header().Set("Content-Type", contentType)
+	w.Header().Set("Cache-Control", "public, max-age=86400") // Cache for 1 day
+	w.Write(content)
+}
+
+// getContentType returns the appropriate Content-Type header for a file
+func getContentType(filePath string) string {
+	switch {
+	case strings.HasSuffix(filePath, ".css"):
+		return "text/css; charset=utf-8"
+	case strings.HasSuffix(filePath, ".js"):
+		return "application/javascript; charset=utf-8"
+	case strings.HasSuffix(filePath, ".json"):
+		return "application/json"
+	case strings.HasSuffix(filePath, ".svg"):
+		return "image/svg+xml"
+	case strings.HasSuffix(filePath, ".png"):
+		return "image/png"
+	case strings.HasSuffix(filePath, ".jpg") || strings.HasSuffix(filePath, ".jpeg"):
+		return "image/jpeg"
+	case strings.HasSuffix(filePath, ".gif"):
+		return "image/gif"
+	case strings.HasSuffix(filePath, ".woff"):
+		return "font/woff"
+	case strings.HasSuffix(filePath, ".woff2"):
+		return "font/woff2"
+	default:
+		return "application/octet-stream"
+	}
 }

@@ -10,15 +10,16 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type Post struct {
-	Slug    string
+type Page struct {
+	Path    string
+	Type    string
 	Content []byte
 	Meta    map[string]any
 }
 
 // Title returns the post title from metadata or the first h1 from
 // content.
-func (p *Post) Title() string {
+func (p *Page) Title() string {
 	if title, ok := p.Meta["title"].(string); ok && title != "" {
 		return title
 	}
@@ -26,7 +27,7 @@ func (p *Post) Title() string {
 }
 
 // Date returns the post date from metadata or current date.
-func (p *Post) Date() time.Time {
+func (p *Page) Date() time.Time {
 	if dateStr, ok := p.Meta["date"].(string); ok && dateStr != "" {
 		if parsedDate, err := time.Parse("2006-01-02", dateStr); err == nil {
 			return time.Date(
@@ -51,7 +52,7 @@ func (p *Post) Date() time.Time {
 
 // Description returns the post description from metadata or lead
 // paragraph.
-func (p *Post) Description() string {
+func (p *Page) Description() string {
 	if desc, ok := p.Meta["description"].(string); ok && desc != "" {
 		return desc
 	}
@@ -59,7 +60,7 @@ func (p *Post) Description() string {
 }
 
 // Tags returns the tags from metadata as a slice of strings.
-func (p *Post) Tags() []string {
+func (p *Page) Tags() []string {
 	// If already a slice of strings, return it
 	if tags, ok := p.Meta["tags"].([]string); ok {
 		return tags
@@ -95,7 +96,7 @@ func (p *Post) Tags() []string {
 
 // extractFirstHeading finds the first h1 heading in the content and
 // returns its text value.
-func (p *Post) extractFirstHeading() string {
+func (p *Page) extractFirstHeading() string {
 	doc := Markdown.Parser().Parse(text.NewReader(p.Content))
 
 	var heading string
@@ -116,7 +117,7 @@ func (p *Post) extractFirstHeading() string {
 }
 
 // extractHeadingText extracts text from a heading node.
-func (p *Post) extractHeadingText(heading *ast.Heading) string {
+func (p *Page) extractHeadingText(heading *ast.Heading) string {
 	buf := new(bytes.Buffer)
 	for child := heading.FirstChild(); child != nil; child = child.NextSibling() {
 		if textNode, ok := child.(*ast.Text); ok {
@@ -128,7 +129,7 @@ func (p *Post) extractHeadingText(heading *ast.Heading) string {
 
 // extractLeadParagraph finds the first paragraph in the content and
 // returns its text value.
-func (p *Post) extractLeadParagraph() string {
+func (p *Page) extractLeadParagraph() string {
 	md := goldmark.New()
 	doc := md.Parser().Parse(text.NewReader(p.Content))
 

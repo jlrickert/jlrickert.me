@@ -31,7 +31,7 @@ func main() {
 		WriteTimeout:   10 * time.Second,
 		IdleTimeout:    120 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 1 MB
-		DefaultTheme:   *theme,
+		Theme:          *theme,
 	}
 
 	// Create and start server
@@ -42,7 +42,7 @@ func main() {
 		logger.Info(
 			"starting portfolio server",
 			"addr", config.Addr,
-			"theme", config.DefaultTheme,
+			"theme", config.Theme,
 		)
 		if err := server.Start(); err != nil {
 			logger.Error("server error", "error", err)
