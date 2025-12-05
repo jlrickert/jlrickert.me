@@ -4,16 +4,20 @@
         {{ partial "head.html" . }}
     </head>
     <body>
-        <header>
-            {{ partial "header.html" . }}
-        </header>
-        <main>
-            <canvas id="starfield"></canvas>
-            <div class="scanline"></div>
-            {{ block "main" . }}{{ end }}
-        </main>
-        <footer>
-            {{ partial "footer.html" . }}
-        </footer>
+        <canvas id="starfield"></canvas>
+        <div class="right-port"></div>
+        <div class="left-port"></div>
+        <div class="port-stem"></div>
+        <div class="monitor scanlines">
+            <header>
+                {{ partial "header.html" . }}
+            </header>
+            <main>
+                {{ block "main" . }}{{ end }}
+            </main>
+            <footer>
+                {{ partial "footer.html" . }}
+            </footer>
+        </div>
     </body>
 </html>
