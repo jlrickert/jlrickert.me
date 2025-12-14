@@ -1,0 +1,38 @@
+baseURL: 'https://jlrickert.me'
+languageCode: 'en-us'
+title: 'portal@jlrickert.me'
+theme: "green-nebula-terminal"
+author:
+  name: "Jared Rickert"
+  avatar: "./avatar.webp"
+
+uglyURLs: true
+canonifyURLs: true
+
+permalinks:
+  blog: /blog/:slug
+  posts: /blog/:slug
+  page:
+    blog: /blog/:slug
+  section:
+    blog: /blog
+  taxonomy: {}
+  term: {}
+
+menus:
+  main:
+    - name: Home
+      pageRef: /
+      weight: 10
+    - name: Blog
+      pageRef: /blog
+      weight: 20
+    - name: Projects
+      pageRef: /projects
+      weight: 30
+    - name: Portfolio
+      pageRef: /portfolio
+      weight: 40
+    - name: Contact
+      pageRef: /contact
+      weight: 50

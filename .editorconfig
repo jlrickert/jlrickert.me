@@ -15,6 +15,10 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 4
 
+[*.go]
+indent_style = tabs
+indent_size = 4
+
 # YAML files
 [*.{yml,yaml}]
 indent_style = space

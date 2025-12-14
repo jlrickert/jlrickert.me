@@ -1,0 +1,4 @@
+/public/
+/resources/
+/tmp/
+.hugo_build.lock

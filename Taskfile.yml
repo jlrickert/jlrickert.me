@@ -4,12 +4,23 @@ version: "3"
 vars:
   GREETING: Hello, World!
 tasks:
-  default:
-    cmds:
-      - echo "{{.GREETING}}" "{{.CLI_ARGS}}"
-    silent: true
+  dev:
+    cmd: docker compose -f docker-compose.dev.yml up
+  serve:
+    cmd: hugo server serve --buildDrafts --disableFastRender --renderToMemory --watch
+#    cmd: fd . | entr -r go run ./cmd
+#    sources:
+#      - data/posts/*.md
+#      - portfolio/**/*.go
+#      - ./**.go
+#      - themes/**
+#    silent: true
   test:
-    cmd: go test ./assets/... "{{.CLI_ARGS}}"
+    cmd: go test ./... "{{.CLI_ARGS}}"
     sources:
-      - assets/*go
+      - data/posts/*.md
+      - portfolio/**/*.go
+      - ./**.go
+      - themes/**
+    silent: true
     watch: true

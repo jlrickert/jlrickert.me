@@ -1,0 +1,44 @@
+services:
+  web:
+    image: ghcr.io/gohugoio/hugo:v0.152.2
+    volumes:
+      - .:/project
+      - hugo_cache:/cache
+    ports:
+      - "1313:1313"
+    environment:
+      - HUGO_BASEURL=http://localhost:1313
+    command: [ "server", "serve", "--buildDrafts", "--disableFastRender", "--renderToMemory", "--bind", "0.0.0.0" ]
+    networks:
+      - portfolio_network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:1313", "||", "exit", "1" ]
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev.api
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - LOG_LEVEL=debug
+    volumes:
+      - .:/workspace
+      - go_modules:/go/pkg/mod
+    working_dir: /workspace
+    command: air
+    networks:
+      - portfolio_network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health", "||", "exit", "1" ]
+
+volumes:
+  hugo_cache:
+  go_modules:
+
+networks:
+  portfolio_network:
+    driver: bridge
