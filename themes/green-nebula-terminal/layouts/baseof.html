@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
-    <head>
-        {{ partial "head.html" . }}
-    </head>
-    <body>
-        <canvas id="starfield"></canvas>
-        <div class="right-port"></div>
-        <div class="left-port"></div>
-        <div class="port-stem"></div>
-        <div class="monitor scanlines">
+<head>
+    {{ partial "head.html" . }}
+</head>
+<body class="theme-green">
+<canvas id="starfield"></canvas>
+<div class="cockpit">
+    <div class="hologram">
+        <div class="scanlines"></div>
+        <div class="screen">
+            <div class="display-grid"></div>
             <header>
                 {{ partial "header.html" . }}
             </header>
@@ -19,5 +20,7 @@
                 {{ partial "footer.html" . }}
             </footer>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

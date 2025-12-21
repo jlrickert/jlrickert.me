@@ -1,2 +1,7 @@
-<h1>{{ site.Title }}:~$ cat welcome.txt<span class="cursor"></span></h1>
+<h1>
+    admin@{{ site.Params.hostname }}<br>
+    > ./{{ lower page.Title}}.sh<span class="cursor"></span>
+</h1>
 {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
+
+<hr>
