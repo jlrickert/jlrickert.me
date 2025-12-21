@@ -41,7 +41,7 @@ body, html {
 }
 
 body {
-    font-family: "MyFont", serif;
+    font-family: "FiraCodeNerd", serif;
     color: var(--terminal-text-color);
     line-height: 1.6;
     overflow-x: hidden;
