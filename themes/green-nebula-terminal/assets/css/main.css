@@ -1,27 +1,5 @@
-:root {
-    --terminal-text-color: #00ff00;
-    --terminal-background: rgba(11, 11, 11, 0.3);
-    --terminal-grid: rgba(0, 255, 0, 0.4);
-    --terminal-separator: rgba(0, 255, 0, 0.2);
-
-    --hologram-background: rgba(0, 60, 0, 0.4);
-    --hologram-shadow: 0 0 5px rgba(0, 255, 0, 1.0),
-    0 0 10px rgba(0, 255, 0, 1.0),
-    0 0 20px rgba(0, 255, 0, 0.25),
-    0 0 40px rgba(0, 255, 0, 0.5);
-
-    --terminal-green: #00ff00;
-    --terminal-green-light: #33ff33;
-    --terminal-green-dark: #00aa00;
-    --terminal-black: #000000;
-    --terminal-bg: #0a0a0a;
-    --terminal-grey: #333333;
-    --terminal-grey-light: #555555;
-    --terminal-grey-lighter: #777777;
-    --terminal-grid-bright: rgba(0, 255, 0, 0.1);
-}
-
-.theme-green {
+html[data-scheme="green"],
+html[data-scheme="default"] {
     --terminal-text-color: #00ff00;
     --terminal-background: rgba(11, 11, 11, 0.3);
     --terminal-grid: rgba(0, 255, 0, 0.4);

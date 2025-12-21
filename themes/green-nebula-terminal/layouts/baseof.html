@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<html lang="{{ site.Language.LanguageCode }}"
+      dir="{{ or site.Language.LanguageDirection `ltr` }}"
+      data-scheme="default">
+>
 <head>
     {{ partial "head.html" . }}
 </head>
-<body class="theme-green">
+<body>
 <canvas id="starfield"></canvas>
 <div class="cockpit">
     <div class="hologram">
