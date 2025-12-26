@@ -7,5 +7,6 @@
         {{ printf "%s | %s" .Title site.Title }}
     {{ end }}
 </title>
+{{ partial "google_analytics.html" . }}
 {{ partialCached "head/css.html" . }}
 {{ partialCached "head/js.html" . }}

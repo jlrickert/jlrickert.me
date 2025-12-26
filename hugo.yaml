@@ -36,3 +36,12 @@ menus:
     - name: Contact
       pageRef: /contact
       weight: 50
+
+services:
+  googleAnalytics:
+    id: G-WXQ3PHET4N
+
+privacy:
+  googleAnalytics:
+    disable: false
+    respectDoNotTrack: true
