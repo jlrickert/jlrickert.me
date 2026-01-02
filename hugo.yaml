@@ -1,41 +1,59 @@
 baseURL: 'https://jlrickert.me'
 languageCode: 'en-us'
-title: 'portal@jlrickert.me'
+title: 'RavNet // NODE JLRICKERT.ME'
 theme: "green-nebula-terminal"
 author:
   name: "Jared Rickert"
   avatar: "./avatar.webp"
 
-uglyURLs: true
-canonifyURLs: true
+#uglyURLs: true
+#canonifyURLs: true
 
 permalinks:
-  blog: /blog/:slug
-  posts: /blog/:slug
+  logs: /logs/:slug
+  posts: /logs/:slug
   page:
-    blog: /blog/:slug
+    logs: /logs/:slug/
   section:
-    blog: /blog
-  taxonomy: {}
-  term: {}
+    logs: /logs/
+  taxonomy: { }
+  term: { }
+
+params:
+  author: Jared Rickert
+  jobTitle: Software Engineer
+  image: avatar.webp
+  sameAs:
+    - https://github.com/jlrickert
+    - https://linkedin.com/in/jaredrickert
+  hostname: ravnet.jlrickert.me
+  asciiArt: |-
+    ╔════════════════════════════════╗
+        ║  JARED RICKERT                 ║
+        ║  SOFTWARE ENGINEER             ║
+        ║  Full Stack | Cloud | DevOps   ║
+        ╚════════════════════════════════╝
+
+enableRobotsTXT: true
+
+imaging:
+  exif:
+    disableLatLong: true
 
 menus:
   main:
-    - name: Home
-      pageRef: /
+    - name: About
+      pageRef: /about
       weight: 10
-    - name: Blog
-      pageRef: /blog
+    - name: Logs
+      pageRef: /logs
       weight: 20
     - name: Projects
       pageRef: /projects
       weight: 30
-    - name: Portfolio
-      pageRef: /portfolio
-      weight: 40
     - name: Contact
       pageRef: /contact
-      weight: 50
+      weight: 40
 
 services:
   googleAnalytics:
