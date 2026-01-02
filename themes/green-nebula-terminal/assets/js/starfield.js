@@ -5,6 +5,9 @@
 
         const ctx = canvas.getContext("2d");
 
+        /**
+         * Resize the canvas to match window dimensions
+         */
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
@@ -13,17 +16,28 @@
         resize();
         window.addEventListener("resize", resize);
 
+        /** @type {number} Number of stars to render */
         const numStars = 400;
+        /** @type {Array<{seed: number, x0: number, y0: number, z0: number, speed: number}>} Star properties */
         const stars = [];
 
         // Stable time base so the animation phase is consistent across reloads
+        /** @type {number} Base time for consistent animation */
         const baseTime = performance.timeOrigin || Date.now();
 
+        /**
+         * Get elapsed time in seconds
+         * @returns {number} Elapsed time
+         */
         function getElapsed() {
             return (Date.now() - baseTime) / 1000; // seconds
         }
 
-        // Deterministic "random"
+        /**
+         * Deterministic "random" number generator
+         * @param {number} seed - Seed value for randomization
+         * @returns {number} Pseudo-random number between 0 and 1
+         */
         function seededRandom(seed) {
             const x = Math.sin(seed) * 10000;
             return x - Math.floor(x);
@@ -41,6 +55,9 @@
             });
         }
 
+        /**
+         * Draw starfield animation
+         */
         function draw() {
             const w = canvas.width;
             const h = canvas.height;
