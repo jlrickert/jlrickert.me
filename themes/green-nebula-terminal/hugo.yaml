@@ -16,3 +16,20 @@ module:
     hugoVersion:
       extended: true
       min: '0.146.0'
+
+markup:
+  goldmark:
+    extensions:
+      passthrough:
+        delimiters:
+          block:
+            - - '\['
+              - '\]'
+            - - $$
+              - $$
+          inline:
+            - - '\('
+              - '\)'
+        enable: true
+params:
+  math: true
