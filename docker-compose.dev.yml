@@ -1,26 +1,54 @@
 services:
+  traefik:
+    image: traefik:v3.6
+    command:
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "8080:80"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - portfolio_network
+    restart: unless-stopped
+
   web:
     image: ghcr.io/gohugoio/hugo:v0.152.2
     volumes:
       - .:/project
       - hugo_cache:/cache
-    ports:
-      - "1313:1313"
+    expose:
+      - 1313
     environment:
       - HUGO_BASEURL=http://localhost:1313
-    command: [ "server", "serve", "--buildDrafts", "--disableFastRender", "--renderToMemory", "--bind", "0.0.0.0" ]
+    command: [
+      "server",
+      "serve",
+      "--watch",
+      "--buildDrafts",
+      "--disableFastRender",
+      "--renderToMemory",
+      "--bind",
+      "0.0.0.0",
+    ]
     networks:
       - portfolio_network
     restart: unless-stopped
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:1313", "||", "exit", "1" ]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.web.entrypoints=web"
+      - "traefik.http.services.web.loadbalancer.server.port=1313"
+      - "traefik.http.routers.web.priority=1"
 
   api:
     build:
       context: .
       dockerfile: Dockerfile.dev.api
-    ports:
-      - "8080:8080"
+    expose:
+      - 8080
     environment:
       - PORT=8080
       - LOG_LEVEL=debug
@@ -32,8 +60,14 @@ services:
     networks:
       - portfolio_network
     restart: unless-stopped
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/health", "||", "exit", "1" ]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.services.api.loadbalancer.server.port=8080"
+      - "traefik.http.routers.api.middlewares=api-stripprefix"
+      - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
+      - "traefik.http.routers.api.priority=2"
 
 volumes:
   hugo_cache:
