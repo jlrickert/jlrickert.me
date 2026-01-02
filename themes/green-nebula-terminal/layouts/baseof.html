@@ -16,9 +16,20 @@
         <div class="scanlines"></div>
         <div class="screen">
             <div class="display-grid"></div>
+
+            <div class="top-status-line">
+                <div class="status-line-item"><a href="/">RavNet // <span class="mobile-hidden">NODE</span> JLRICKERT.ME</a></div>
+                <div class="status-line-item">STATUS<span class="mobile-hidden">:</span> CONNECTED
+                </div>
+                <div id="latency-indicator" class="status-line-item">LATENCY<span
+                        class="mobile-hidden">:</span> 42ms
+                </div>
+            </div>
+
             <header>
                 {{ partial "header.html" . }}
             </header>
+            <hr>
             <main>
                 {{ block "main" . }}{{ end }}
             </main>

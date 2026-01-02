@@ -1,8 +1,9 @@
 {{ define "main" }}
+    Home
+    <img alt="avatar of Jared Rickert" height="200" width="300" src="/{{ .Site.Params.image }}" class="avatar"/>
     {{ .Content }}
     {{ range site.RegularPages }}
         <section>
-            HOME
             <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
             {{ .Summary }}
         </section>

@@ -11,7 +11,7 @@ Renders a menu for the given menu ID.
 {{- $menuID := .menuID }}
 
 {{- with index site.Menus $menuID }}
-    <nav class="tree">
+    <nav class="tabs">
         <ul>
             {{- partial "inline/menu/walk.html" (dict "page" $page "menuEntries" .) }}
         </ul>
@@ -33,13 +33,13 @@ Renders a menu for the given menu ID.
                 {{- $name = . }}
             {{- end }}
         {{- end }}
-        <li>
+        <li class="tab">
             <a {{- range $k, $v := $attrs }}
                    {{- with $v }}
                        {{- printf " %s=%q" $k $v | safeHTMLAttr }}
                    {{- end }}
                {{- end -}}
-            >{{ lower $name }}.sh
+            >{{ $name }}
             </a>
             {{- with .Children }}
                 <ul>

@@ -1,1 +1,2 @@
-<p>Copyright {{ now.Year }}. All rights reserved.</p>
+<p>Copyright {{ now.Year }} {{ if .Site.Params.author }}{{ .Site.Params.author }}{{ end }}. All
+    rights reserved.</p>

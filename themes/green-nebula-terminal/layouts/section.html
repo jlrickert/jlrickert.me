@@ -1,11 +1,44 @@
 {{ define "main" }}
-    <h1>{{ .Title }}</h1>
-    SECTION
-    {{ .Content }}
-    {{ range .Pages }}
-        <section class="">
-            <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-            {{ .Summary }}
-        </section>
-    {{ end }}
+    <div class="panel">
+        <h1>{{ .Title }}</h1>
+        <hr>
+        SECTION
+        {{ .Content }}
+        <div class="card-grid">
+            {{ range .Pages }}
+                <section class="card">
+                    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
+
+                    {{ if .Params.image }}
+                        {{ $imgObj := .Resources.GetMatch "b2mfg.png" }}
+                        {{ if $imgObj }}
+                            {{ $resized := $imgObj.Fill "200x200 webp q100" }}
+                            <img src="{{ $resized.RelPermalink }}"
+                                 class="gallery-featured"
+                                 width="{{ $resized.Width }}"
+                                 height="{{ $resized.Height }}"
+                                 {{ if .Params.imgAlt }}alt="{{ .Params.imgAlt }}"{{ end }}
+                                 onclick="openGallery(0)">
+                        {{ end }}
+                    {{ end }}
+
+                    <!-- Thumbnail gallery -->
+                    <div id="gallery-thumbs" class="gallery-grid">
+                        {{ range $index, $imgObj := .Params.gallery }}
+                            {{ $img := $.Resources.GetMatch $imgObj.file }}
+                            {{ if $img }}
+                                <img src="{{ ($img.Resize "200x").RelPermalink }}"
+                                     alt="{{ $imgObj.alt }}" onclick="openGallery({{ $index }})">
+                            {{ end }}
+                        {{ end }}
+                    </div>
+                    {{ .Summary }}
+                    {{ if .Params.date }}
+                        <div class="card-date">{{ dateFormat "2006-01-02" .Params.date }}</div>
+                    {{ end }}
+                    <a class="card-read-more" href="{{ .RelPermalink }}">Read more</a>
+                </section>
+            {{ end }}
+        </div>
+    </div>
 {{ end }}
