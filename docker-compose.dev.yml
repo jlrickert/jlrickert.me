@@ -7,7 +7,8 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
     ports:
-      - "8080:80"
+      - "80:80"
+      - "443:443"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
@@ -15,14 +16,16 @@ services:
     restart: unless-stopped
 
   web:
-    image: ghcr.io/gohugoio/hugo:v0.152.2
+    build:
+      context: .
+      dockerfile: Docker/Dockerfile.dev.web
     volumes:
       - .:/project
       - hugo_cache:/cache
     expose:
       - 1313
     environment:
-      - HUGO_BASEURL=http://localhost:1313
+      - HUGO_BASEURL=http://web.localhost:1313
     command: [
       "server",
       "serve",
@@ -30,6 +33,8 @@ services:
       "--buildDrafts",
       "--disableFastRender",
       "--renderToMemory",
+      "--appendPort=false",
+      "--liveReloadPort=0",
       "--bind",
       "0.0.0.0",
     ]
@@ -46,7 +51,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile.dev.api
+      dockerfile: Docker/Dockerfile.dev.api
     expose:
       - 8080
     environment:

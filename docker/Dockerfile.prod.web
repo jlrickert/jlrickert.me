@@ -1,0 +1,54 @@
+# Build stage
+FROM ghcr.io/gohugoio/hugo:v0.152.2 as builder
+
+WORKDIR /src
+
+COPY . .
+
+RUN hugo --minify
+
+# Production stage
+FROM caddy:latest
+
+WORKDIR /srv
+
+# Copy built Hugo site from builder stage
+COPY --from=builder /src/public .
+
+# Create a simple Caddyfile for serving static content and proxying API
+RUN cat > /etc/caddy/Caddyfile <<'EOF'
+{
+  email {$CADDY_EMAIL:-admin@example.com}
+  auto_https off
+}
+
+:80 {
+  root * /srv
+
+  # Proxy API requests
+  reverse_proxy /api/* http://api:8080
+  reverse_proxy /health http://api:8080
+
+  # Serve static files
+  file_server
+
+  # Fallback to index.html for SPA-like routing
+  try_files {path} /index.html
+}
+
+# HTTPS setup (uncomment for production with real domain)
+# Traefik gateway handles this
+# {$DOMAIN} {
+#   root * /srv
+#
+#   reverse_proxy /api/* http://api:8080
+#   reverse_proxy /health http://api:8080
+#
+#   file_server
+#   try_files {path} /index.html
+# }
+EOF
+
+EXPOSE 80
+
+CMD ["caddy", "run", "--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]

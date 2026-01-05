@@ -1,0 +1,12 @@
+FROM ghcr.io/gohugoio/hugo:v0.152.2
+LABEL authors="jlrickert"
+
+USER root:root
+RUN apk add --no-cache curl unzip libstdc++ libgcc bash
+USER hugo:hugo
+
+ENV BUN_INSTALL="/var/hugo/.bun"
+ENV PATH="$BUN_INSTALL/bin:$PATH"
+
+RUN curl -fsSL https://bun.com/install | bash && \
+    $BUN_INSTALL/bin/bun install --global tailwindcss @tailwindcss/cli
