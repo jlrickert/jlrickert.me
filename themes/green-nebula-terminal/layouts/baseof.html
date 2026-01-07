@@ -18,7 +18,9 @@
             <div class="display-grid"></div>
 
             <div class="top-status-line">
-                <div class="status-line-item"><a href="/">RavNet // <span class="mobile-hidden">NODE</span> JLRICKERT.ME</a></div>
+                <div class="status-line-item"><a href="/">RavNet <span
+                        class="mobile-hidden">// NODE</span> JLRICKERT.ME</a>
+                </div>
                 <div class="status-line-item">STATUS<span class="mobile-hidden">:</span> CONNECTED
                 </div>
                 <div id="latency-indicator" class="status-line-item">LATENCY<span
@@ -26,11 +28,11 @@
                 </div>
             </div>
 
-            <header>
+            <header class="panel">
                 {{ partial "header.html" . }}
             </header>
             <hr>
-            <main>
+            <main class="panel">
                 {{ block "main" . }}{{ end }}
             </main>
             <footer>

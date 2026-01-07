@@ -10,5 +10,7 @@
 {{ partial "google_analytics.html" . }}
 {{ partial "opengraph.html" . }}
 {{ partial "schema.html" . }}
-{{ partialCached "head/css.html" . }}
+{{ with (templates.Defer (dict "key" "global")) }}
+    {{ partialCached "head/css.html" . }}
+{{ end }}
 {{ partialCached "head/js.html" . }}

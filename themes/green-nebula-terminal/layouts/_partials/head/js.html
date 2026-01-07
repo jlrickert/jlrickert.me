@@ -1,13 +1,16 @@
 {{- $main := resources.Get "js/main.js" }}
 {{- $starfield := resources.Get "js/starfield.js" }}
 {{- $bundle := slice $main $starfield | resources.Concat "js/bundle.js" }}
-{{- $opts := dict "minify" (not hugo.IsDevelopment) "sourceMap" (cond hugo.IsDevelopment "external" "") }}
+{{- $opts := dict
+        "minify" (not hugo.IsDevelopment)
+        "sourceMap" (cond hugo.IsDevelopment "external" "")
+}}
 {{- with $bundle | js.Build $opts }}
     {{- if hugo.IsDevelopment }}
-        <script type="module" defer src="{{ .RelPermalink }}"></script>
+        <script defer src="{{ .RelPermalink }}"></script>
     {{- else }}
         {{- with . | fingerprint }}
-            <script type="module" src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"
+            <script defer src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}"
                     crossorigin="anonymous"></script>
         {{- end }}
     {{- end }}

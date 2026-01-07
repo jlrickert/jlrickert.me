@@ -1,29 +1,29 @@
 html[data-scheme="green"],
 html[data-scheme="default"] {
-    --terminal-text-color: #00ff00;
-    --terminal-background: rgba(11, 11, 11, 0.3);
-    --terminal-grid: rgba(0, 255, 0, 0.4);
-    --terminal-separator: rgba(0, 255, 0, 0.2);
-
-    --hologram-background: rgba(0, 60, 0, 0.4);
+    --hologram-bg: rgba(0, 60, 0, 0.4);
     --hologram-shadow: 0 0 5px rgba(0, 255, 0, 1.0),
     0 0 10px rgba(0, 255, 0, 1.0),
     0 0 20px rgba(0, 255, 0, 0.25),
     0 0 40px rgba(0, 255, 0, 0.5);
 
-    --terminal-green: #00ff00;
-    --terminal-green-light: #33ff33;
-    --terminal-green-dark: #00aa00;
-    --terminal-black: #000000;
-    --terminal-bg: #0a0a0a;
-    --terminal-grey: #333333;
-    --terminal-grey-light: #555555;
-    --terminal-grey-lighter: #777777;
-    --terminal-grid-bright: rgba(0, 255, 0, 0.1);
+    --screen-bg: rgba(11, 11, 11, 0.3);
+    --screen-panel-bg: rgba(10, 25, 20, 0.85);
+    --screen-panel-border-1: rgba(10, 255, 10, 0.6);
+    --screen-panel-border-2: rgba(10, 255, 10, 0.9);
+    --screen-panel-shadow-1: rgba(10, 255, 10, 0.25);
+    --screen-panel-shadow-2: rgba(10, 255, 10, 0.6);
+    --screen-panel-shadow-3: rgba(10, 255, 10, 0.4);
+    --screen-separator: rgba(0, 255, 0, 0.2);
+    --screen-text: rgb(0, 255, 0);
+    --screen-grid: rgba(0, 255, 0, 0.4);
+    --screen-link: rgb(0, 255, 0);
+    --screen-h1: rgb(0, 255, 0);
+    --screen-h2: rgb(0, 255, 0);
+    --screen-h3: rgb(0, 255, 0);
 }
 
 @font-face {
-    font-family: "MyFont";
+    font-family: "FiraCodeNerd";
     src: url("/fonts/FiraCodeNerdFontPropo-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
@@ -42,13 +42,77 @@ body, html {
 
 body {
     font-family: "FiraCodeNerd", serif;
-    color: var(--terminal-text-color);
+    color: var(--screen-text);
     line-height: 1.6;
     overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
     scrollbar-width: thin;
-    scrollbar-color: var(--terminal-text-color) transparent;
+    scrollbar-color: var(--screen-text) transparent;
+}
+
+:root {
+    --font-size-h1: clamp(2rem, 5vw, 3rem);
+    --font-size-h2: clamp(1.75rem, 4vw, 2.25rem);
+    --font-size-h3: clamp(1.375rem, 3.5vw, 1.75rem);
+    --font-size-p: clamp(1rem, 2.5vw, 1.25rem);
+}
+
+h1 {
+    font-size: var(--font-size-h1);
+    color: var(--screen-h1);
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: var(--font-size-h2);
+    color: var(--screen-h2);
+    line-height: 1.3;
+}
+
+h3 {
+    font-size: var(--font-size-h3);
+    color: var(--screen-h3);
+    line-height: 1.4;
+}
+
+p {
+    font-size: var(--font-size-p);
+    color: var(--screen-text);
+    line-height: 1.6;
+}
+
+pre {
+    font-family: "FiraCodeNerd", monospace;
+    background: var(--screen-panel-bg);
+}
+
+h1 a, h2 a, h3 a {
+    color: inherit;
+}
+
+a {
+    color: var(--screen-link);
+    text-decoration: underline;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: auto 0;
+}
+footer.panel {
+    position: absolute;
+}
+
+@media (min-width: 576px) {
+}
+
+.mermaid {
+    background: var(--screen-panel-bg);
 }
 
 .cockpit {
@@ -56,25 +120,8 @@ body {
     height: 100%;
 }
 
-.frame-background {
-    display: none;
-}
-
-.cockpit-img {
-    height: 100vh;
-    aspect-ratio: 16/9;
-    object-position: center;
-    pointer-events: none;
-    flex: 1 0 auto;
-    z-index: 1000;
-}
-
-.cockpit-frame {
-    display: none;
-}
-
 hr {
-    border: 1px solid var(--terminal-separator);
+    border: 1px solid var(--screen-separator);
     margin: 15px;
 }
 
@@ -89,16 +136,15 @@ hr {
 }
 
 .hologram {
+    position: relative;
     height: 100%;
     max-width: 100%;
     overflow: auto;
 }
 
 .screen {
-    background: var(--terminal-background);
+    background: var(--screen-bg);
     width: 100%;
-    padding: 20px;
-    /*box-shadow: var(--glow);*/
     overflow: auto;
     flex: 1;
 }
@@ -113,8 +159,8 @@ hr {
     /*linear-gradient(90deg, var(--terminal-grid) 1px, transparent 1px);*/
     /*background-image: repeating-linear-gradient(90deg, var(--terminal-grid) 1px, transparent 1px);*/
     background-size: 40px 40px;
-    background-image: linear-gradient(to right, var(--terminal-grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--terminal-grid) 1px, transparent 1px);
+    background-image: linear-gradient(to right, var(--screen-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--screen-grid) 1px, transparent 1px);
     background-repeat: repeat;
     background-attachment: scroll;
     pointer-events: none;
@@ -137,6 +183,103 @@ hr {
     );
     pointer-events: none;
     animation: scan 8s linear infinite;
+}
+
+.main {
+    padding: 20px;
+}
+
+.panel {
+    margin: 1rem;
+    padding: 1rem;
+    position: relative;
+    background: var(--screen-panel-bg);
+    border: 1px solid var(--screen-panel-border-1);
+    box-shadow: 0 0 24px var(--screen-panel-shadow-1);
+    clip-path: polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - 24px),
+            calc(100% - 24px) 100%,
+            0 100%
+    );
+}
+
+.panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: inherit;
+    border: 1px solid var(--screen-panel-border-2);
+    box-shadow: 0 0 12px var(--screen-panel-shadow-2),
+    inset 0 0 12px var(--screen-panel-shadow-3);
+}
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    margin: 1rem;
+    padding: 1rem;
+    position: relative;
+    background: var(--screen-panel-bg);
+    border: 1px solid var(--screen-panel-border-1);
+    box-shadow: 0 0 24px var(--screen-panel-shadow-1);
+    clip-path: polygon(
+            0 0,
+            100% 0,
+            100% calc(100% - 24px),
+            calc(100% - 24px) 100%,
+            0 100%
+    );
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    clip-path: inherit;
+    border: 1px solid var(--screen-panel-border-2);
+    box-shadow: 0 0 12px var(--screen-panel-shadow-2),
+    inset 0 0 12px var(--screen-panel-shadow-3);
+}
+
+.card img {
+    max-width: 100%;
+}
+
+.card-read-more {
+    display: block;
+    margin-left: auto;
+}
+
+@supports not (clip-path: polygon(0 0)) {
+    .panel, .card {
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 575px) {
+    .mobile-hidden {
+        display: none;
+    }
+
+    .mobile-flex {
+        display: flex;
+    }
+
+    .mobile-block {
+        display: block;
+    }
+
+    .mobile-span {
+        display: inline-block;
+    }
 }
 
 @media (min-width: 576px) {
@@ -182,7 +325,7 @@ hr {
         width: 90vw;
         max-width: 90ch;
         border-radius: 16px;
-        background-color: var(--hologram-background);
+        background-color: var(--hologram-bg);
         box-shadow: var(--hologram-shadow);
     }
 
@@ -196,12 +339,28 @@ hr {
 @media (min-width: 992px) {
 }
 
-h1 {
-    font-size: 1.2em;
-    margin-bottom: 15px;
+.top-status-line {
+    position: sticky;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    background: var(--screen-panel-bg);
 }
 
-.port {
+.top-status-line .status-line-item {
+    flex: 1 1 auto;
+    text-align: center;
+}
+
+.status-line-item ~ .status-line-item {
+    border-left: 1px solid var(--screen-panel-border-1);
+}
+
+#latency-indicator {
 }
 
 .tree ul {
@@ -212,7 +371,6 @@ h1 {
 }
 
 .tree ul {
-    before: .;
 }
 
 .tree li {
@@ -256,8 +414,7 @@ nav {
 }
 
 nav a {
-    color: var(--terminal-green);
-    text-decoration: none;
+    color: var(--screen-text);
     transition: all 0.3s;
     padding: 5px 10px;
     border: 1px solid transparent;
@@ -265,8 +422,7 @@ nav a {
 
 nav a:hover {
     text-shadow: var(--glow);
-    border: 1px solid var(--terminal-green);
-    background: rgba(0, 255, 0, 0.05);
+    border: 1px solid var(--screen-text);
 }
 
 section {
@@ -289,12 +445,8 @@ section {
 }
 
 .ascii-art {
-    font-size: 0.7em;
-    line-height: 1;
-    color: var(--terminal-green-light);
     margin: 20px 0;
     white-space: pre;
-    overflow-x: auto;
 }
 
 .hero-text {
@@ -568,3 +720,4 @@ section {
         padding: 15px;
     }
 }
+
