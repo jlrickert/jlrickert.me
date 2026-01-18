@@ -2,8 +2,11 @@ services:
   traefik:
     image: traefik:v3.6
     command:
+      - "--api=true"
+      - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
+      - "--providers.docker.network=portfolio_network"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
     ports:
@@ -15,7 +18,24 @@ services:
       - portfolio_network
     restart: unless-stopped
 
-  web:
+    # Traefik Dynamic configuration via Docker labels
+    labels:
+      # Enable self‑routing
+      - "traefik.enable=true"
+
+      # Dashboard router
+      - "traefik.http.routers.dashboard.rule=Host(`dashboard.docker.localhost`)"
+      - "traefik.http.routers.dashboard.entrypoints=web"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.priority=1"
+      - "traefik.http.services.dashboard.loadbalancer.server.port=8080"
+  #      - "traefik.http.routers.dashboard.tls=true"
+
+  #      # Basic‑auth middleware
+  #      - "traefik.http.middlewares.dashboard-auth.basicauth.users=<PASTE_HASH_HERE>"
+  #      - "traefik.http.routers.dashboard.middlewares=dashboard-auth@docker"
+
+  portfolio:
     build:
       context: .
       dockerfile: Docker/Dockerfile.dev.web
@@ -25,14 +45,13 @@ services:
     expose:
       - 1313
     environment:
-      - HUGO_BASEURL=http://web.localhost:1313
+      - HUGO_BASEURL=http://portfolio.docker.localhost
     command: [
       "server",
       "serve",
       "--watch",
       "--buildDrafts",
       "--disableFastRender",
-      "--renderToMemory",
       "--appendPort=false",
       "--liveReloadPort=0",
       "--bind",
@@ -43,10 +62,11 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.rule=PathPrefix(`/`)"
-      - "traefik.http.routers.web.entrypoints=web"
-      - "traefik.http.services.web.loadbalancer.server.port=1313"
-      - "traefik.http.routers.web.priority=1"
+      - "traefik.http.routers.portfolio.entrypoints=web"
+      - "traefik.http.routers.portfolio.rule=Host(`portfolio.docker.localhost`)"
+      - "traefik.http.routers.portfolio.priority=1"
+      - "traefik.http.routers.portfolio.observability.metrics=true"
+      - "traefik.http.services.portfolio.loadbalancer.server.port=1313"
 
   api:
     build:
@@ -67,12 +87,14 @@ services:
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.api.rule=PathPrefix(`/api`)"
+      # Single router handling both api.docker.localhost AND portfolio.docker.localhost/api
+      - "traefik.http.routers.api.rule=Host(`api.docker.localhost`) || (Host(`portfolio.docker.localhost`) && PathPrefix(`/api`))"
       - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.api.priority=0"
+
       - "traefik.http.services.api.loadbalancer.server.port=8080"
       - "traefik.http.routers.api.middlewares=api-stripprefix"
       - "traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api"
-      - "traefik.http.routers.api.priority=2"
 
 volumes:
   hugo_cache:
