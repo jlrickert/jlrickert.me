@@ -6,6 +6,7 @@ html[data-scheme="default"] {
     0 0 20px rgba(0, 255, 0, 0.25),
     0 0 40px rgba(0, 255, 0, 0.5);
 
+    --screen-ui-max-width: 1280px;
     --screen-bg: rgba(11, 11, 11, 0.3);
     --screen-panel-bg: rgba(10, 25, 20, 0.85);
     --screen-panel-border-1: rgba(10, 255, 10, 0.6);
@@ -20,6 +21,18 @@ html[data-scheme="default"] {
     --screen-h1: rgb(0, 255, 0);
     --screen-h2: rgb(0, 255, 0);
     --screen-h3: rgb(0, 255, 0);
+
+    --pagefind-ui-scale: .8;
+    --pagefind-ui-primary: var(--screen-link);     /* rgb(0, 255, 0) */
+    --pagefind-ui-text: var(--screen-text);        /* rgb(0, 255, 0) */
+    --pagefind-ui-background: var(--screen-bg);    /* rgba(11, 11, 11, 0.3) */
+    --pagefind-ui-border: var(--screen-panel-border-1);  /* rgba(10, 255, 10, 0.6) */
+    --pagefind-ui-tag: var(--screen-panel-shadow-1);     /* rgba(10, 255, 10, 0.25) */
+    --pagefind-ui-border-width: 2px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-box-ratio: 3 / 2;
+    --pagefind-ui-font: "FiraCodeNerd", monospace;
 }
 
 @font-face {
@@ -97,10 +110,6 @@ a {
 }
 
 footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
     text-align: center;
     margin: auto 0;
 }
@@ -139,7 +148,6 @@ hr {
     position: relative;
     height: 100%;
     max-width: 100%;
-    overflow: auto;
 }
 
 .screen {
@@ -323,7 +331,7 @@ hr {
         bottom: 12%;
         height: 78vh;
         width: 90vw;
-        max-width: 90ch;
+        max-width: var(--screen-ui-max-width);
         border-radius: 16px;
         background-color: var(--hologram-bg);
         box-shadow: var(--hologram-shadow);
@@ -404,25 +412,6 @@ hr {
 header {
     padding: 20px;
     margin-bottom: 30px;
-}
-
-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    font-size: 0.9em;
-}
-
-nav a {
-    color: var(--screen-text);
-    transition: all 0.3s;
-    padding: 5px 10px;
-    border: 1px solid transparent;
-}
-
-nav a:hover {
-    text-shadow: var(--glow);
-    border: 1px solid var(--screen-text);
 }
 
 section {
@@ -721,3 +710,138 @@ section {
     }
 }
 
+.page-content {
+    padding: 1rem;
+    line-height: 1.6;
+    color: var(--screen-text);
+}
+
+.page-content h1,
+.page-content h2,
+.page-content h3 {
+    color: var(--screen-text);
+    margin-bottom: 0.5rem;
+}
+
+.page-content h1 {
+    padding-bottom: 0.25rem;
+}
+
+.page-content p {
+    margin-bottom: 1rem;
+}
+
+.page-content a {
+    color: var(--screen-link);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.page-content a:hover {
+    color: var(--screen-text);
+    text-shadow: 0 0 5px var(--screen-link);
+}
+
+.page-content ul,
+.page-content ol {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.page-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 1rem auto;
+    box-shadow: 0 0 10px var(--screen-panel-shadow-1);
+    border: 1px solid var(--screen-panel-border-1);
+}
+
+.page-content table {
+    overflow: auto;
+}
+
+.page-content code {
+    padding: 0.2rem 0.4rem;
+    font-family: "FiraCodeNerd", monospace;
+}
+
+.page-content p code {
+    border: 1px solid var(--screen-panel-border-1);
+    /*background: var(--screen-panel-bg);*/
+}
+
+.page-content pre code {
+}
+
+.page-content pre {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    overflow-x: auto;
+}
+
+.page-content blockquote {
+    border-left: 4px solid var(--screen-separator);
+    padding-left: 1rem;
+    color: var(--screen-text);
+    opacity: 0.8;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.page-content hr {
+    border: none;
+    border-top: 1px solid var(--screen-separator);
+    margin: 1.5rem 0;
+}
+
+@media (max-width: 768px) {
+    .page-content {
+        max-width: 100%;
+        padding: 0.5rem;
+    }
+}
+
+nav.menu ul {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap to next line */
+    gap: 1rem;       /* Space between buttons */
+    justify-content: center;
+    padding: 1rem;
+    list-style: none;
+}
+
+nav.menu ul > li {
+    position: relative;
+    text-decoration: none;
+
+    /* Typography */
+    /*font-family: 'Courier New', monospace; !* Or your preferred font *!*/
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #00ff41; /* Matrix Green */
+
+    /* Shape & Size */
+    padding: 12px 30px;
+    background: rgba(0, 20, 0, 0.6); /* Semi-transparent dark background */
+
+    /* The Sci-Fi Border */
+    border: 1px solid #00ff41;
+
+    /* This creates the cut corners (chamfered edges) */
+    clip-path: polygon(
+            15px 0,
+            100% 0,
+            100% calc(100% - 15px),
+            calc(100% - 15px) 100%,
+            0 100%,
+            0 15px
+    );
+
+    /* Creates the outer neon glow that follows the clip-path shape */
+    filter: drop-shadow(0 0 5px rgba(0, 255, 65, 0.5));
+
+    /* Smooth transition for hover effects */
+    transition: all 0.3s ease;
+}
