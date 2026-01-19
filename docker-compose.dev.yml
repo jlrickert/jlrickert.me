@@ -68,6 +68,26 @@ services:
       - "traefik.http.routers.portfolio.observability.metrics=true"
       - "traefik.http.services.portfolio.loadbalancer.server.port=1313"
 
+  search:
+    image: node:24-alpine
+    volumes:
+      - .:/project
+    working_dir: /project
+    expose:
+      - 1414
+    command: npx -y pagefind@1.4.0 --site public --serve
+    networks:
+      - portfolio_network
+    restart: unless-stopped
+    depends_on:
+      - portfolio
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.search.entrypoints=web"
+      - "traefik.http.routers.search.rule=Host(`search.docker.localhost`)"
+      - "traefik.http.routers.search.priority=3"
+      - "traefik.http.services.search.loadbalancer.server.port=1414"
+
   api:
     build:
       context: .
