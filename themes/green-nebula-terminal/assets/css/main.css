@@ -1,33 +1,93 @@
 html[data-scheme="green"],
 html[data-scheme="default"] {
-    --hologram-bg: rgba(0, 60, 0, 0.4);
-    --hologram-shadow: 0 0 5px rgba(0, 255, 0, 1.0),
+    /* Accent colors in varying intensities */
+    --accent-color: rgb(0, 255, 0);
+    --accent-soft: rgba(0, 255, 0, 0.25);
+    --accent-medium: rgba(0, 255, 0, 0.6);
+    --accent-bright: rgba(0, 255, 0, 1.0);
+    --accent-very-soft: rgba(0, 255, 0, 0.2);
+
+    /* Text colors */
+    --text-primary: rgb(0, 255, 0);
+    --text-muted: rgba(0, 255, 0, 0.6);
+
+    /* Background colors */
+    --bg-main: rgba(11, 11, 11, 0.3);
+    --bg-panel: rgba(10, 25, 20, 0.85);
+    --bg-hologram: rgba(0, 60, 0, 0.4);
+
+    /* Border colors */
+    --border-subtle: rgba(10, 255, 10, 0.6);
+    --border-strong: rgba(10, 255, 10, 0.9);
+
+    /* UI Elements */
+    --separator-color: rgba(0, 255, 0, 0.2);
+    --grid-color: rgba(0, 255, 0, 0.4);
+
+    /* Glow effects */
+    --glow-shadow: 0 0 5px rgba(0, 255, 0, 1.0),
     0 0 10px rgba(0, 255, 0, 1.0),
     0 0 20px rgba(0, 255, 0, 0.25),
     0 0 40px rgba(0, 255, 0, 0.5);
 
+    /* Layout */
     --screen-ui-max-width: 1280px;
-    --screen-bg: rgba(11, 11, 11, 0.3);
-    --screen-panel-bg: rgba(10, 25, 20, 0.85);
-    --screen-panel-border-1: rgba(10, 255, 10, 0.6);
-    --screen-panel-border-2: rgba(10, 255, 10, 0.9);
-    --screen-panel-shadow-1: rgba(10, 255, 10, 0.25);
-    --screen-panel-shadow-2: rgba(10, 255, 10, 0.6);
-    --screen-panel-shadow-3: rgba(10, 255, 10, 0.4);
-    --screen-separator: rgba(0, 255, 0, 0.2);
-    --screen-text: rgb(0, 255, 0);
-    --screen-grid: rgba(0, 255, 0, 0.4);
-    --screen-link: rgb(0, 255, 0);
-    --screen-h1: rgb(0, 255, 0);
-    --screen-h2: rgb(0, 255, 0);
-    --screen-h3: rgb(0, 255, 0);
 
+    /* Pagefind integration */
     --pagefind-ui-scale: .8;
-    --pagefind-ui-primary: var(--screen-link);     /* rgb(0, 255, 0) */
-    --pagefind-ui-text: var(--screen-text);        /* rgb(0, 255, 0) */
-    --pagefind-ui-background: var(--screen-bg);    /* rgba(11, 11, 11, 0.3) */
-    --pagefind-ui-border: var(--screen-panel-border-1);  /* rgba(10, 255, 10, 0.6) */
-    --pagefind-ui-tag: var(--screen-panel-shadow-1);     /* rgba(10, 255, 10, 0.25) */
+    --pagefind-ui-primary: var(--accent-color);
+    --pagefind-ui-text: var(--text-primary);
+    --pagefind-ui-background: var(--bg-main);
+    --pagefind-ui-border: var(--border-subtle);
+    --pagefind-ui-tag: var(--accent-soft);
+    --pagefind-ui-border-width: 2px;
+    --pagefind-ui-border-radius: 8px;
+    --pagefind-ui-image-border-radius: 8px;
+    --pagefind-ui-image-box-ratio: 3 / 2;
+    --pagefind-ui-font: "FiraCodeNerd", monospace;
+}
+
+html[data-scheme="christmas"] {
+    /* Accent colors in varying intensities */
+    --accent-color: rgb(220, 20, 60);
+    --accent-soft: rgba(220, 20, 60, 0.25);
+    --accent-medium: rgba(220, 20, 60, 0.6);
+    --accent-bright: rgba(220, 20, 60, 1.0);
+    --accent-very-soft: rgba(220, 20, 60, 0.2);
+
+    /* Text colors */
+    --text-primary: rgb(255, 255, 255);
+    --text-muted: rgba(200, 200, 200, 0.6);
+
+    /* Background colors */
+    --bg-main: rgba(11, 11, 11, 0.3);
+    --bg-panel: rgba(20, 10, 10, 0.85);
+    --bg-hologram: rgba(80, 10, 10, 0.4);
+
+    /* Border colors */
+    --border-subtle: rgba(220, 20, 60, 0.6);
+    --border-strong: rgba(255, 255, 255, 0.9);
+
+    /* UI Elements */
+    --separator-color: rgba(220, 20, 60, 0.2);
+    --grid-color: rgba(220, 20, 60, 0.4);
+
+    /* Glow effects */
+    --glow-shadow: 0 0 5px rgba(220, 20, 60, 1.0),
+    0 0 10px rgba(220, 20, 60, 1.0),
+    0 0 20px rgba(220, 20, 60, 0.25),
+    0 0 40px rgba(220, 20, 60, 0.5);
+
+    /* Layout */
+    --screen-ui-max-width: 1280px;
+
+    /* Pagefind integration */
+    --pagefind-ui-scale: .8;
+    --pagefind-ui-primary: var(--accent-color);
+    --pagefind-ui-text: var(--text-primary);
+    --pagefind-ui-background: var(--bg-main);
+    --pagefind-ui-border: var(--border-subtle);
+    --pagefind-ui-tag: var(--accent-soft);
     --pagefind-ui-border-width: 2px;
     --pagefind-ui-border-radius: 8px;
     --pagefind-ui-image-border-radius: 8px;
@@ -55,13 +115,13 @@ body, html {
 
 body {
     font-family: "FiraCodeNerd", serif;
-    color: var(--screen-text);
+    color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
     position: relative;
     scroll-behavior: smooth;
     scrollbar-width: thin;
-    scrollbar-color: var(--screen-text) transparent;
+    scrollbar-color: var(--text-primary) transparent;
 }
 
 :root {
@@ -73,31 +133,31 @@ body {
 
 h1 {
     font-size: var(--font-size-h1);
-    color: var(--screen-h1);
+    color: var(--text-primary);
     line-height: 1.2;
 }
 
 h2 {
     font-size: var(--font-size-h2);
-    color: var(--screen-h2);
+    color: var(--text-primary);
     line-height: 1.3;
 }
 
 h3 {
     font-size: var(--font-size-h3);
-    color: var(--screen-h3);
+    color: var(--text-primary);
     line-height: 1.4;
 }
 
 p {
     font-size: var(--font-size-p);
-    color: var(--screen-text);
+    color: var(--text-primary);
     line-height: 1.6;
 }
 
 pre {
     font-family: "FiraCodeNerd", monospace;
-    background: var(--screen-panel-bg);
+    background: var(--bg-panel);
 }
 
 h1 a, h2 a, h3 a {
@@ -105,7 +165,7 @@ h1 a, h2 a, h3 a {
 }
 
 a {
-    color: var(--screen-link);
+    color: var(--accent-color);
     text-decoration: underline;
 }
 
@@ -113,6 +173,7 @@ footer {
     text-align: center;
     margin: auto 0;
 }
+
 footer.panel {
     position: absolute;
 }
@@ -130,7 +191,7 @@ footer.panel {
 }
 
 hr {
-    border: 1px solid var(--screen-separator);
+    border: 1px solid var(--separator-color);
     margin: 15px;
 }
 
@@ -151,7 +212,7 @@ hr {
 }
 
 .screen {
-    background: var(--screen-bg);
+    background: var(--bg-main);
     width: 100%;
     overflow: auto;
     flex: 1;
@@ -167,8 +228,8 @@ hr {
     /*linear-gradient(90deg, var(--terminal-grid) 1px, transparent 1px);*/
     /*background-image: repeating-linear-gradient(90deg, var(--terminal-grid) 1px, transparent 1px);*/
     background-size: 40px 40px;
-    background-image: linear-gradient(to right, var(--screen-grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--screen-grid) 1px, transparent 1px);
+    background-image: linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px);
     background-repeat: repeat;
     background-attachment: scroll;
     pointer-events: none;
@@ -201,9 +262,9 @@ hr {
     margin: 1rem;
     padding: 1rem;
     position: relative;
-    background: var(--screen-panel-bg);
-    border: 1px solid var(--screen-panel-border-1);
-    box-shadow: 0 0 24px var(--screen-panel-shadow-1);
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 0 24px var(--accent-soft);
     clip-path: polygon(
             0 0,
             100% 0,
@@ -219,9 +280,9 @@ hr {
     inset: 0;
     pointer-events: none;
     clip-path: inherit;
-    border: 1px solid var(--screen-panel-border-2);
-    box-shadow: 0 0 12px var(--screen-panel-shadow-2),
-    inset 0 0 12px var(--screen-panel-shadow-3);
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 0 12px var(--accent-medium),
+    inset 0 0 12px var(--accent-soft);
 }
 
 .card-grid {
@@ -234,9 +295,9 @@ hr {
     margin: 1rem;
     padding: 1rem;
     position: relative;
-    background: var(--screen-panel-bg);
-    border: 1px solid var(--screen-panel-border-1);
-    box-shadow: 0 0 24px var(--screen-panel-shadow-1);
+    background: var(--bg-panel);
+    border: 1px solid var(--border-subtle);
+    box-shadow: 0 0 24px var(--accent-soft);
     clip-path: polygon(
             0 0,
             100% 0,
@@ -252,9 +313,9 @@ hr {
     inset: 0;
     pointer-events: none;
     clip-path: inherit;
-    border: 1px solid var(--screen-panel-border-2);
-    box-shadow: 0 0 12px var(--screen-panel-shadow-2),
-    inset 0 0 12px var(--screen-panel-shadow-3);
+    border: 1px solid var(--border-strong);
+    box-shadow: 0 0 12px var(--accent-medium),
+    inset 0 0 12px var(--accent-soft);
 }
 
 .card img {
@@ -314,12 +375,16 @@ hr {
         min-height: 100vh;
         overflow: hidden;
 
-        background-image: url('/station.webp');
+        background-image: url('/station_1080p.webp');
         background-repeat: no-repeat;
         background-position-y: 150px;
         background-position-x: center;
         background-size: cover;
         position-anchor: bottom;
+
+        @media (min-width: 768px) {
+            background-image: url('/station.webp');
+        }
     }
 
     .hologram {
@@ -333,8 +398,8 @@ hr {
         width: 90vw;
         max-width: var(--screen-ui-max-width);
         border-radius: 16px;
-        background-color: var(--hologram-bg);
-        box-shadow: var(--hologram-shadow);
+        background-color: var(--bg-hologram);
+        box-shadow: var(--glow-shadow);
     }
 
     .screen {
@@ -347,6 +412,10 @@ hr {
 @media (min-width: 992px) {
 }
 
+.status-line-item {
+    color: var(--accent-color);
+}
+
 .top-status-line {
     position: sticky;
     z-index: 1;
@@ -356,7 +425,7 @@ hr {
     display: flex;
     justify-content: space-around;
     margin-bottom: 10px;
-    background: var(--screen-panel-bg);
+    background: var(--bg-panel);
 }
 
 .top-status-line .status-line-item {
@@ -365,7 +434,7 @@ hr {
 }
 
 .status-line-item ~ .status-line-item {
-    border-left: 1px solid var(--screen-panel-border-1);
+    border-left: 1px solid var(--border-subtle);
 }
 
 #latency-indicator {
@@ -423,12 +492,12 @@ section {
 .section-header {
     font-size: 1.5em;
     margin-bottom: 20px;
-    color: var(--terminal-green-light);
-    text-shadow: 0 0 5px var(--terminal-green);
+    color: var(--text-primary);
+    text-shadow: 0 0 5px var(--accent-color);
 }
 
 .divider {
-    color: var(--terminal-green-dark);
+    color: var(--text-muted);
     margin: 20px 0;
     opacity: 0.6;
 }
@@ -457,7 +526,7 @@ section {
 }
 
 .project-card {
-    border: 2px solid var(--terminal-green-dark);
+    border: 2px solid var(--text-muted);
     padding: 20px;
     background: rgba(0, 0, 0, 0.8);
     transition: all 0.3s;
@@ -465,13 +534,13 @@ section {
 }
 
 .project-card:hover {
-    border-color: var(--terminal-green);
-    box-shadow: var(--glow);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px var(--accent-soft);
     transform: translateY(-5px);
 }
 
 .project-header {
-    color: var(--terminal-green-light);
+    color: var(--text-primary);
     font-size: 1.1em;
     margin-bottom: 10px;
 }
@@ -479,14 +548,14 @@ section {
 .project-status {
     display: inline-block;
     padding: 2px 8px;
-    border: 1px solid var(--terminal-green);
+    border: 1px solid var(--accent-color);
     font-size: 0.8em;
     margin-bottom: 10px;
-    color: var(--terminal-green-light);
+    color: var(--text-primary);
 }
 
 .project-tech {
-    color: var(--terminal-green-dark);
+    color: var(--text-muted);
     font-size: 0.9em;
     margin-top: 10px;
 }
@@ -496,33 +565,33 @@ section {
 }
 
 .blog-post {
-    border-left: 3px solid var(--terminal-green-dark);
+    border-left: 3px solid var(--text-muted);
     padding: 15px;
     margin-bottom: 20px;
-    background: rgba(0, 255, 0, 0.02);
+    background: var(--accent-very-soft);
     cursor: pointer;
     transition: all 0.3s;
 }
 
 .blog-post:hover {
-    border-left-color: var(--terminal-green);
-    background: rgba(0, 255, 0, 0.05);
+    border-left-color: var(--accent-color);
+    background: var(--accent-soft);
     padding-left: 20px;
 }
 
 .blog-date {
-    color: var(--terminal-green-dark);
+    color: var(--text-muted);
     font-size: 0.9em;
 }
 
 .blog-title {
-    color: var(--terminal-green-light);
+    color: var(--text-primary);
     font-size: 1.2em;
     margin: 5px 0;
 }
 
 .blog-excerpt {
-    color: var(--terminal-green);
+    color: var(--accent-color);
     font-size: 0.95em;
 }
 
@@ -541,7 +610,7 @@ section {
     content: "├──";
     position: absolute;
     left: 0;
-    color: var(--terminal-green-dark);
+    color: var(--text-muted);
 }
 
 .skill-item:last-child::before {
@@ -560,16 +629,16 @@ section {
 .form-label {
     display: block;
     margin-bottom: 5px;
-    color: var(--terminal-green-light);
+    color: var(--text-primary);
 }
 
 .form-input,
 .form-textarea {
     width: 100%;
     padding: 10px;
-    background: var(--terminal-black);
-    border: 1px solid var(--terminal-green-dark);
-    color: var(--terminal-green);
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--text-muted);
+    color: var(--accent-color);
     font-family: "Courier New", Courier, monospace;
     font-size: 1em;
     transition: all 0.3s;
@@ -578,8 +647,8 @@ section {
 .form-input:focus,
 .form-textarea:focus {
     outline: none;
-    border-color: var(--terminal-green);
-    box-shadow: 0 0 5px var(--terminal-green);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 5px var(--accent-soft);
 }
 
 .form-textarea {
@@ -589,8 +658,8 @@ section {
 
 .submit-btn {
     background: transparent;
-    color: var(--terminal-green);
-    border: 2px solid var(--terminal-green);
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
     padding: 10px 30px;
     font-family: "Courier New", Courier, monospace;
     font-size: 1em;
@@ -599,9 +668,9 @@ section {
 }
 
 .submit-btn:hover {
-    background: var(--terminal-green);
-    color: var(--terminal-black);
-    box-shadow: var(--glow);
+    background: var(--accent-color);
+    color: var(--bg-main);
+    box-shadow: 0 0 10px var(--accent-soft);
 }
 
 .social-links {
@@ -611,14 +680,14 @@ section {
 .social-link {
     display: block;
     margin: 10px 0;
-    color: var(--terminal-green);
+    color: var(--accent-color);
     text-decoration: none;
     transition: all 0.3s;
 }
 
 .social-link:hover {
-    color: var(--terminal-green-light);
-    text-shadow: var(--glow);
+    color: var(--text-primary);
+    text-shadow: 0 0 5px var(--accent-color);
     padding-left: 10px;
 }
 
@@ -628,10 +697,10 @@ section {
     right: 20px;
     width: 400px;
     max-width: calc(100vw - 40px);
-    border: 2px solid var(--terminal-green);
+    border: 2px solid var(--accent-color);
     background: rgba(0, 0, 0, 0.95);
     z-index: 1000;
-    box-shadow: var(--glow);
+    box-shadow: 0 0 10px var(--accent-soft);
 }
 
 .terminal-widget.minimized {
@@ -640,8 +709,8 @@ section {
 }
 
 .terminal-header {
-    background: var(--terminal-green-dark);
-    color: var(--terminal-black);
+    background: var(--text-muted);
+    color: rgba(0, 0, 0, 0.8);
     padding: 5px 10px;
     display: flex;
     justify-content: space-between;
@@ -664,7 +733,7 @@ section {
 .terminal-input-line {
     display: flex;
     padding: 10px;
-    border-top: 1px solid var(--terminal-green-dark);
+    border-top: 1px solid var(--text-muted);
 }
 
 .terminal-prompt {
@@ -675,7 +744,7 @@ section {
     flex: 1;
     background: transparent;
     border: none;
-    color: var(--terminal-green);
+    color: var(--accent-color);
     font-family: "Courier New", Courier, monospace;
     font-size: 0.9em;
     outline: none;
@@ -713,13 +782,13 @@ section {
 .page-content {
     padding: 1rem;
     line-height: 1.6;
-    color: var(--screen-text);
+    color: var(--text-primary);
 }
 
 .page-content h1,
 .page-content h2,
 .page-content h3 {
-    color: var(--screen-text);
+    color: var(--text-primary);
     margin-bottom: 0.5rem;
 }
 
@@ -732,14 +801,14 @@ section {
 }
 
 .page-content a {
-    color: var(--screen-link);
+    color: var(--accent-color);
     text-decoration: underline;
     transition: color 0.3s ease;
 }
 
 .page-content a:hover {
-    color: var(--screen-text);
-    text-shadow: 0 0 5px var(--screen-link);
+    color: var(--text-primary);
+    text-shadow: 0 0 5px var(--accent-color);
 }
 
 .page-content ul,
@@ -753,8 +822,8 @@ section {
     height: auto;
     display: block;
     margin: 1rem auto;
-    box-shadow: 0 0 10px var(--screen-panel-shadow-1);
-    border: 1px solid var(--screen-panel-border-1);
+    box-shadow: 0 0 10px var(--accent-soft);
+    border: 1px solid var(--border-subtle);
 }
 
 .page-content table {
@@ -767,8 +836,8 @@ section {
 }
 
 .page-content p code {
-    border: 1px solid var(--screen-panel-border-1);
-    /*background: var(--screen-panel-bg);*/
+    border: 1px solid var(--border-subtle);
+    /*background: var(--bg-panel);*/
 }
 
 .page-content pre code {
@@ -781,9 +850,9 @@ section {
 }
 
 .page-content blockquote {
-    border-left: 4px solid var(--screen-separator);
+    border-left: 4px solid var(--separator-color);
     padding-left: 1rem;
-    color: var(--screen-text);
+    color: var(--text-primary);
     opacity: 0.8;
     font-style: italic;
     margin-bottom: 1rem;
@@ -791,7 +860,7 @@ section {
 
 .page-content hr {
     border: none;
-    border-top: 1px solid var(--screen-separator);
+    border-top: 1px solid var(--separator-color);
     margin: 1.5rem 0;
 }
 
@@ -805,7 +874,7 @@ section {
 nav.menu ul {
     display: flex;
     flex-wrap: wrap; /* Allows items to wrap to next line */
-    gap: 1rem;       /* Space between buttons */
+    gap: 1rem; /* Space between buttons */
     justify-content: center;
     padding: 1rem;
     list-style: none;
@@ -820,14 +889,14 @@ nav.menu ul > li {
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 2px;
-    color: #00ff41; /* Matrix Green */
+    color: var(--accent-color);
 
     /* Shape & Size */
     padding: 12px 30px;
-    background: rgba(0, 20, 0, 0.6); /* Semi-transparent dark background */
+    background: var(--bg-hologram);
 
     /* The Sci-Fi Border */
-    border: 1px solid #00ff41;
+    border: 1px solid var(--accent-color);
 
     /* This creates the cut corners (chamfered edges) */
     clip-path: polygon(
@@ -840,7 +909,7 @@ nav.menu ul > li {
     );
 
     /* Creates the outer neon glow that follows the clip-path shape */
-    filter: drop-shadow(0 0 5px rgba(0, 255, 65, 0.5));
+    filter: drop-shadow(0 0 5px var(--accent-soft));
 
     /* Smooth transition for hover effects */
     transition: all 0.3s ease;
