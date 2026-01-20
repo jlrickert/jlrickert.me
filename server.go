@@ -10,12 +10,14 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/gorilla/websocket"
 )
 
 type Server struct {
 	startTime time.Time
 	router    *chi.Mux
 	logger    *slog.Logger
+	upgrader  websocket.Upgrader
 }
 
 func NewServer(logger *slog.Logger) *Server {
@@ -39,6 +41,11 @@ func NewServer(logger *slog.Logger) *Server {
 	server := &Server{
 		router: r,
 		logger: logger,
+		upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool {
+				return true // Allow all origins for development
+			},
+		},
 	}
 
 	server.setupRoutes()
@@ -49,6 +56,7 @@ func (s *Server) setupRoutes() {
 	s.router.Get("/", s.handleHello)
 	s.router.Get("/health", s.handleHealth)
 	s.router.Get("/ping", s.handlePing)
+	s.router.Get("/ws", s.handleWebSocket)
 }
 
 type PingResponse struct {
@@ -70,6 +78,46 @@ func (s *Server) handlePing(w http.ResponseWriter, r *http.Request) {
 		ServerUptime: uptime,
 	}
 	json.NewEncoder(w).Encode(resp)
+}
+
+// handleWebSocket handles WebSocket connections for real-time ping data
+func (s *Server) handleWebSocket(w http.ResponseWriter, r *http.Request) {
+	conn, err := s.upgrader.Upgrade(w, r, nil)
+	if err != nil {
+		s.logger.Error("websocket upgrade error", "error", err)
+		return
+	}
+	defer conn.Close()
+
+	s.logger.Debug("websocket connection established")
+
+	for {
+		// Read message from client
+		var msg map[string]interface{}
+		err := conn.ReadJSON(&msg)
+		if err != nil {
+			if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+				s.logger.Error("websocket error", "error", err)
+			}
+			break
+		}
+
+		// Generate ping response
+		start := time.Now()
+		uptime := time.Since(s.startTime)
+
+		resp := PingResponse{
+			ServerTime:   start,
+			Timestamp:    start.UnixMilli(),
+			ServerUptime: uptime,
+		}
+
+		// Send response back to client
+		if err := conn.WriteJSON(resp); err != nil {
+			s.logger.Error("websocket write error", "error", err)
+			break
+		}
+	}
 }
 
 // handleHello handles GET / requests

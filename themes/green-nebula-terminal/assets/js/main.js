@@ -8,100 +8,138 @@
  * @property {*} [error] - Error if ping failed
  */
 
+class State {
+    history = []
+
+    constructor() {
+        this.history = [];
+    }
+
+    pushToState(item) {
+        if (this.history.length >= 5) {
+            this.history.shift();
+        }
+        this.history.push(item);
+    }
+
+    getAverageLatency() {
+        return this.history.reduce((acc, val) => acc + val, 0) / this.history.length;
+    }
+}
+
+// ============================================================================
+// NEW WEBSOCKET-BASED PING LOGIC
+// ============================================================================
+
+let ws = null;
+let pingState = new State();
+
 /**
- * Ping the server and retrieve server information
- * @returns {Promise<PingResult>} Ping result
+ * Initialize WebSocket connection to server
+ * @returns {Promise<void>}
  */
-async function ping() {
+async function initWebSocket() {
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsUrl = `${protocol}//${window.location.host}/api/ws`;
+
     try {
-        const resp = await fetch('/api/ping');
-        const data = await resp.json();
-        const uptime = new Date(Date.now() - data.uptime);
-        const serverTime = new Date(data.serverTime);
-        const timestamp = Number.parseInt(data.timestamp, 10);
-        return {
-            success: true,
-            value: {
-                serverTime,
-                timestamp,
-                uptime
-            }
+        ws = new WebSocket(wsUrl);
+
+        ws.onopen = () => {
+            console.log('WebSocket connected to', wsUrl);
+            // Start sending ping requests
+            sendPingRequest();
         };
-    } catch (e) {
-        return {
-            success: false,
-            error: e
+
+        ws.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            handlePingResponse(data);
         };
+
+        ws.onerror = (error) => {
+            console.error('WebSocket error:', error);
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket disconnected');
+            // Attempt to reconnect after 3 seconds
+            setTimeout(initWebSocket, 3000);
+        };
+    } catch (error) {
+        console.error('Failed to initialize WebSocket:', error);
+        setTimeout(initWebSocket, 3000);
     }
 }
 
 /**
- * Measure network latency by pinging the server
+ * Send a ping request to the server
+ */
+function sendPingRequest() {
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        const start = performance.now();
+        ws.pingStart = start;
+        ws.send(JSON.stringify({ type: 'ping' }));
+    }
+}
+
+/**
+ * Handle ping response from server
+ * @param {Object} data - Server ping response
+ */
+function handlePingResponse(data) {
+    const end = performance.now();
+    const latency = end - (ws.pingStart || end);
+
+    pingState.pushToState(latency);
+
+    const elem = document.getElementById('latency-indicator');
+    if (elem) {
+        const avg = pingState.getAverageLatency();
+        let renderedLatency = avg <= 10 ? avg.toFixed(2) : Math.round(avg);
+        renderedLatency = renderedLatency
+            .toString()
+            .padStart(4, ' ')
+            .replace(/ /g, '&nbsp;');
+
+        elem.innerHTML = `LATENCY<span class="mobile-hidden">:</span> ${renderedLatency}ms`;
+    }
+}
+
+/**
+ * Measure network latency via WebSocket
  * @returns {Promise<number|null>} Latency in milliseconds
  */
 async function measureLatency() {
-    const start = performance.now();
-    const data = await ping();
-    if (!data.success) {
-        return null;
-    }
-    const end = performance.now();
-    const rtt = end - start;
-    return rtt;
+    return new Promise((resolve) => {
+        if (!ws || ws.readyState !== WebSocket.OPEN) {
+            resolve(null);
+            return;
+        }
+
+        const start = performance.now();
+        const messageHandler = () => {
+            const end = performance.now();
+            ws.removeEventListener('message', messageHandler);
+            resolve(end - start);
+        };
+
+        ws.addEventListener('message', messageHandler);
+        ws.send(JSON.stringify({ type: 'ping' }));
+    });
 }
+// ============================================================================
+// END NEW WEBSOCKET-BASED PING LOGIC
+// ============================================================================
 
 console.log('Running main.js...');
 window.addEventListener('DOMContentLoaded', () => {
-    const elem = document.getElementById('latency-indicator');
+    // Initialize WebSocket connection for real-time ping data
+    initWebSocket();
 
-    /**
-     * Generate a random latency value
-     * @param {number} [min=20] - Minimum latency
-     * @param {number} [max=150] - Maximum latency
-     * @returns {number} Random latency
-     */
-    function getRandomLatency(min = 20, max = 150) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    const state = {history: []};
-    function pushToState(state, item) {
-        if (state.history.length >= 5) {
-            state.history.shift();
-        }
-        state.history.push(item);
-    }
-
-    function getAverageLatency(state) {
-        return state.history.reduce((acc, val) => acc + val, 0) / state.history.length;
-    }
-
-    /**
-     * Update the latency indicator
-     * @returns {Promise<void>}
-     */
-    async function updateLatency(state) {
-        const res = await measureLatency();
-        if (elem) {
-            const latency = await measureLatency() ?? getRandomLatency()
-            pushToState(state, latency);
-
-            const avg = getAverageLatency(state);
-
-            let renderedLatency = 0;
-            if (latency <= 10) {
-                renderedLatency = latency.toFixed(3)
-            } else {
-                renderedLatency = Math.round(latency);
-            }
-
-
-            elem.innerHTML = `LATENCY<span class="mobile-hidden">:</span> ${renderedLatency}ms`;
-        }
-    }
-
-    updateLatency(state);
-    setInterval(() => updateLatency(state), 1000);
+    // Send ping requests every 1 second
+    setInterval(() => {
+        sendPingRequest();
+    }, 1000);
 });
 
 // Expose measureLatency to window for use in JS templates
