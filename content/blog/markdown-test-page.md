@@ -3,7 +3,7 @@ title: Markdown Test Page
 slug: markdown-test-page
 author: Jared Rickert
 date: 2025-12-21
-description: Test page for markdown to showcase all the supported features of this blog.
+description: "A comprehensive showcase of all supported markdown features including headers, lists, code blocks, tables, diagrams, and math rendering."
 tags:
   - markdown
 ---

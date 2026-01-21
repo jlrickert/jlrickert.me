@@ -2,6 +2,8 @@
 date: "2025-12-04T22:52:01-06:00"
 draft: false
 title: "What Is a Keg"
+slug: what-is-a-keg
+description: "Understanding Knowledge Exchange Graphs (KEGs)—personal knowledge management systems that organize information as interconnected nodes instead of traditional folders."
 ---
 
 # What is a KEG? Building Your Own Personal Knowledge Graph

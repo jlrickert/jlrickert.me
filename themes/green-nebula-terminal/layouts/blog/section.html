@@ -1,0 +1,15 @@
+{{ define "main" }}
+    {{ if .Content }}
+        <div class="">
+            <h1>{{ .Title }}</h1>
+            {{ .Description }}
+        </div>
+    {{ end }}
+    <hr>
+    {{ range .Pages }}
+        <section class="panel inner page-content">
+            <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
+            {{ .Summary }}
+        </section>
+    {{ end }}
+{{ end }}

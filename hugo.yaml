@@ -10,12 +10,12 @@ author:
 #canonifyURLs: true
 
 permalinks:
-  logs: /logs/:slug
-  posts: /logs/:slug
+  blog: /blog/:slug
+  posts: /blog/:slug
   page:
-    logs: /logs/:slug/
+    blog: /blog/:slug/
   section:
-    logs: /logs/
+    blog: /blog/
   taxonomy: { }
   term: { }
 
@@ -23,6 +23,8 @@ params:
   author: Jared Rickert
   jobTitle: Software Engineer
   image: avatar.webp
+  search:
+    enable: true
   sameAs:
     - https://github.com/jlrickert
     - https://linkedin.com/in/jaredrickert
@@ -45,8 +47,8 @@ menus:
     - name: About
       pageRef: /about
       weight: 10
-    - name: Logs
-      pageRef: /logs
+    - name: Blog
+      pageRef: /blog
       weight: 20
     - name: Projects
       pageRef: /projects

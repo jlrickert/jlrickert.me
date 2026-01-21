@@ -825,6 +825,10 @@ section {
     box-shadow: 0 0 10px var(--accent-soft);
     border: 1px solid var(--border-subtle);
 }
+.page-content img.avatar {
+    border: none;
+    box-shadow: none;
+}
 
 .page-content table {
     overflow: auto;
@@ -832,6 +836,7 @@ section {
 
 .page-content code {
     padding: 0.2rem 0.4rem;
+    background: var(--accent-very-soft);
     font-family: "FiraCodeNerd", monospace;
 }
 

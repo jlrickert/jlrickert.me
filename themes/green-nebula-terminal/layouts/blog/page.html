@@ -1,13 +1,15 @@
 {{ define "main" }}
-    <div class="panel">
-        <h1>{{ .Title }} - Log PAGE</h1>
-        <hr>
+    <div class="panel page-content">
+        <h1>LOG // {{ .Title }}</h1>
 
         {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
         {{ $dateHuman := .Date | time.Format ":date_long" }}
         <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+        <hr>
 
         {{ .Content }}
     </div>
-    <div class="panel">{{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}</div>
+    {{ if .Params.tags }}
+        <div class="panel page-content">{{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}</div>
+    {{ end }}
 {{ end }}

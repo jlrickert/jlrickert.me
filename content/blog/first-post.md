@@ -1,13 +1,12 @@
 ---
 title: Welcome to My Blog
+slug: welcome
 date: 2025-11-17
-description: An introduction to my portfolio and what you can expect here
+description: "An introduction to my portfolio, sharing thoughts on software development, Go programming, and building things on the web."
 tags:
-    - welcome
-    - introduction
+- welcome
+- introduction
 ---
-
-# Welcome to My Blog
 
 Hello! I'm Jared, and this is my first post. I'm excited to share my thoughts on software development, Go programming,
 and building things on the web.
