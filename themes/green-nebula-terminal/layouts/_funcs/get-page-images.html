@@ -1,0 +1,33 @@
+{{- $images := slice -}}
+
+{{- /* Extract images from page content */ -}}
+{{- with .Content -}}
+    {{- $imageRegex := `<img[^>]+src="([^"]+)"` -}}
+    {{- range $index, $match := findRE $imageRegex . -}}
+        {{- $src := index (findRE `src="([^"]+)"` $match) 0 | replaceRE `src="` `` | replaceRE `"` `` -}}
+        {{- $fullSrc := "" -}}
+
+        {{- /* Handle absolute and relative URLs */ -}}
+        {{- if or (hasPrefix $src "http") (hasPrefix $src "//") -}}
+            {{- $fullSrc = $src -}}
+        {{- else -}}
+            {{- $fullSrc = path.Join .Permalink $src -}}
+        {{- end -}}
+
+        {{- $images = $images | append (dict "Permalink" $fullSrc) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- /* Extract featured image */ -}}
+{{- with .Params.featured_image -}}
+    {{- $images = $images | append (dict "Permalink" .) -}}
+{{- end -}}
+
+{{- /* Extract images from frontmatter */ -}}
+{{- with .Params.images -}}
+    {{- range . -}}
+        {{- $images = $images | append (dict "Permalink" .) -}}
+    {{- end -}}
+{{- end -}}
+
+{{- $images -}}
