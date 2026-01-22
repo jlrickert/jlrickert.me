@@ -21,6 +21,7 @@ permalinks:
 
 params:
   author: Jared Rickert
+  description: Jared Rickert - Full Stack Software Engineer specializing in frontend, backend, cloud infrastructure, and DevOps
   jobTitle: Software Engineer
   image: avatar.webp
   search:

@@ -1,0 +1,116 @@
+{{- $ISO8601 := "2006-01-02T15:04:05-07:00" -}}
+
+{{- /* ---------- Common values ---------- */ -}}
+{{- $title := or .Title site.Title | plainify -}}
+{{- $description := or .Description .Summary site.Params.description | plainify | htmlUnescape -}}
+
+{{- $published := "" -}}
+{{- with .PublishDate }}{{ $published = .Format $ISO8601 }}{{ end -}}
+
+{{- $modified := "" -}}
+{{- with .Lastmod }}{{ $modified = .Format $ISO8601 }}{{ end -}}
+
+{{- $images := slice -}}
+{{- range (partial "_funcs/get-page-images" .) -}}
+    {{- $images = $images | append .Permalink -}}
+{{- end -}}
+
+{{- /* ---------- Keywords (preserved precedence) ---------- */ -}}
+{{- $keywords := slice -}}
+{{- range .GetTerms "keywords" -}}
+    {{- $keywords = $keywords | append .Title -}}
+{{- else -}}
+    {{- with .Keywords -}}
+        {{- $keywords = . -}}
+    {{- else -}}
+        {{- range .GetTerms "tags" -}}
+            {{- $keywords = $keywords | append .Title -}}
+        {{- else -}}
+            {{- range $taxonomy, $_ := site.Taxonomies -}}
+                {{- range $.GetTerms $taxonomy -}}
+                    {{- $keywords = $keywords | append .Title -}}
+                {{- end -}}
+            {{- end -}}
+        {{- end -}}
+    {{- end -}}
+{{- end -}}
+
+{{- /* ---------- Person (site owner) ---------- */ -}}
+{{- $person := dict
+        "@type" "Person"
+        "@id" (print site.BaseURL "#owner")
+        "name" (site.Params.author | default site.Title)
+        "url" site.BaseURL
+-}}
+
+{{- with site.Params.jobTitle -}}
+    {{- $person = merge $person (dict "jobTitle" .) -}}
+{{- end -}}
+
+{{- with site.Params.sameAs -}}
+    {{- $person = merge $person (dict "sameAs" .) -}}
+{{- end -}}
+
+{{- /* ---------- WebSite ---------- */ -}}
+{{- $website := dict
+        "@type" "WebSite"
+        "@id" (print site.BaseURL "#website")
+        "name" site.Title
+        "url" site.BaseURL
+        "publisher" (dict "@id" (print site.BaseURL "#owner"))
+-}}
+
+{{- /* ---------- Page-specific node ---------- */ -}}
+{{- $pageNode := dict -}}
+
+{{- if and .IsPage (hasPrefix .RelPermalink "/logs/") -}}
+    {{- $pageNode = dict
+            "@type" "BlogPosting"
+            "headline" $title
+            "description" $description
+            "url" .Permalink
+            "author" (dict "@id" (print site.BaseURL "#owner"))
+            "mainEntityOfPage" (dict
+            "@type" "WebPage"
+            "@id" .Permalink
+            )
+    -}}
+
+    {{- with $published -}}
+        {{- $pageNode = merge $pageNode (dict "datePublished" .) -}}
+    {{- end -}}
+
+    {{- with $modified -}}
+        {{- $pageNode = merge $pageNode (dict "dateModified" .) -}}
+    {{- end -}}
+
+    {{- with $keywords -}}
+        {{- $pageNode = merge $pageNode (dict "keywords" (delimit . ",")) -}}
+    {{- end -}}
+
+    {{- if gt (len $images) 0 -}}
+        {{- $pageNode = merge $pageNode (dict "image" $images) -}}
+    {{- end -}}
+
+{{- else -}}
+
+    {{- $pageNode = dict
+            "@type" "WebPage"
+            "name" $title
+            "description" $description
+            "url" .Permalink
+            "isPartOf" (dict "@id" (print site.BaseURL "#website"))
+    -}}
+
+{{- end -}}
+
+{{- /* ---------- Final graph ---------- */ -}}
+{{- $graph := dict
+        "@context" "https://schema.org"
+        "@graph" (slice $person $website $pageNode)
+-}}
+
+<script type="application/ld+json">
+{{ $graph }}
+
+</script>
