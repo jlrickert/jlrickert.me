@@ -835,7 +835,6 @@ section {
 }
 
 .page-content code {
-    padding: 0.2rem 0.4rem;
     background: var(--accent-very-soft);
     font-family: "FiraCodeNerd", monospace;
 }

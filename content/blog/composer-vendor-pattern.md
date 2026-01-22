@@ -9,8 +9,6 @@ tags:
   - deployment
 ---
 
-# The Vendor Pattern with Composer: When and Why to Commit Dependencies
-
 When working with PHP projects using Composer, you typically have two approaches to managing your `vendor/` directory:
 
 1. **Standard approach**: Add `vendor/` to `.gitignore`, commit only `composer.json` and `composer.lock`, and run `composer install` during deployment
