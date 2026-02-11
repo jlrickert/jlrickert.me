@@ -24,7 +24,8 @@ I started programming early and have been hooked ever since. Over the years, I'v
 - Writing technical content to share knowledge
 - Exploring new technologies and frameworks
 - Running and staying active
-- Baking (especially traditional recipes like my family's coffee cake)
+- Salsa and Latin dancing
+- Baking (especially sourdough recipes)
 
 ## Let's Work Together
 

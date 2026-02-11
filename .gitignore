@@ -2,3 +2,4 @@
 /resources/
 /tmp/
 .hugo_build.lock
+.env
